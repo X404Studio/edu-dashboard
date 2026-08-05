@@ -1,31 +1,40 @@
 import Sidebar from "../components/Sidebar";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import * as XLSX from "xlsx";
+import { setDashboardData } from "../data/dashboardData";
+import {
+  UploadOutlined,
+  DeleteOutlined,
+  FileExcelOutlined,
+  CheckCircleOutlined,
+  DatabaseOutlined,
+  PictureOutlined,
+  FolderOpenOutlined,
+  UserOutlined,
+  LockOutlined,
+  EyeOutlined
+} from "@ant-design/icons";
 import {
   Layout,
   Card,
   Button,
   Modal,
-  message,
-  Empty,
+  Input,
   Select,
-  Table,
+  message,
+  Upload,
+  Tabs,
   Alert,
   Tag,
-  Popconfirm,
   Space,
+  Popconfirm,
+  Empty,
+  Table
 } from "antd";
-import {
-  UploadOutlined,
-  FileExcelOutlined,
-  CheckCircleOutlined,
-  EyeOutlined,
-  DeleteOutlined,
-  DatabaseOutlined,
-} from "@ant-design/icons";
- 
+
 const { Header, Content } = Layout;
  
-// ตั้งค่า URL ของ Backend — Vite ใช้ import.meta.env แทน process.env ของ Next.js
+// ตั้งค่า URL ของ Backend
 const API = import.meta.env.VITE_API_URL || "http://localhost:8000";
  
 // เดาตารางที่น่าจะตรงจากชื่อไฟล์แบบเบาๆ (แค่ pre-select ให้ ผู้ใช้ยังต้องยืนยันเองผ่าน preview)
