@@ -2,35 +2,8 @@ import Sidebar from "../components/Sidebar";
 import { useState, useEffect, useCallback } from "react";
 import * as XLSX from "xlsx";
 import { setDashboardData } from "../data/dashboardData";
-import {
-  UploadOutlined,
-  DeleteOutlined,
-  FileExcelOutlined,
-  CheckCircleOutlined,
-  DatabaseOutlined,
-  PictureOutlined,
-  FolderOpenOutlined,
-  UserOutlined,
-  LockOutlined,
-  EyeOutlined
-} from "@ant-design/icons";
-import {
-  Layout,
-  Card,
-  Button,
-  Modal,
-  Input,
-  Select,
-  message,
-  Upload,
-  Tabs,
-  Alert,
-  Tag,
-  Space,
-  Popconfirm,
-  Empty,
-  Table
-} from "antd";
+import { UploadOutlined, FileExcelOutlined, CheckCircleOutlined, EyeOutlined, DeleteOutlined, DatabaseOutlined, WarningFilled } from "@ant-design/icons";
+import { Layout, Card, Button, Modal, message, Empty, Select, Table, Alert, Tag, Popconfirm, Space, Input } from "antd";
 
 const { Header, Content } = Layout;
  
@@ -201,7 +174,7 @@ function UploadPage() {
           setSelectedFile(null);
           setFileName("");
           setTableName(undefined);
-          fetchTables(); // รีเฟรช row_count ให้ตรงกับข้อมูลใหม่ทันที
+          fetchTables();
         } catch (err) {
           message.error("เชื่อมต่อ Backend ไม่ได้ระหว่างนำเข้าข้อมูล");
         } finally {
@@ -249,7 +222,30 @@ function UploadPage() {
       message.error("เชื่อมต่อ Backend ไม่ได้ระหว่างลบข้อมูล");
     }
   };
- 
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
+  const openDeleteModal = (table) => {
+   setDeleteTarget(table);
+   setDeleteConfirmText("");
+  };
+
+  const confirmDelete = async () => {
+   try {
+     const res = await fetch(`${API}/api/tables/${deleteTarget.table_name}/data`, {
+       method: "DELETE",
+      });
+     const result = await res.json();
+     if (!res.ok) {
+       message.error(result.detail || "ลบข้อมูลไม่สำเร็จ");
+       return;
+     }
+     message.success(result.message);
+     setDeleteTarget(null);
+     fetchTables();
+   } catch (err) {
+      message.error("เชื่อมต่อ Backend ไม่ได้ระหว่างลบข้อมูล");
+    }
+  };
   // ── สร้าง columns สำหรับ antd Table จาก preview ──────────────────
   const previewColumns =
     previewData?.columns.map((col) => ({
@@ -435,19 +431,15 @@ function UploadPage() {
                       >
                         ดูข้อมูล
                       </Button>
-                      <Popconfirm
-                        title={`ลบข้อมูลทั้งหมดในตาราง "${t.label}"?`}
-                        description="การกระทำนี้ลบข้อมูลทั้งตารางและกู้คืนไม่ได้"
-                        okText="ลบเลย"
-                        okButtonProps={{ danger: true }}
-                        cancelText="ยกเลิก"
-                        onConfirm={() => handleDeleteData(t)}
+                      <Button
+                        size="small"
+                        danger
+                        icon={<DeleteOutlined />}
+                        onClick={() => openDeleteModal(t)}
                         disabled={t.row_count === 0}
-                      >
-                        <Button size="small" danger icon={<DeleteOutlined />} disabled={t.row_count === 0}>
+                        >
                           ลบข้อมูล
                         </Button>
-                      </Popconfirm>
                     </Space>
                   </div>
                 ))}
@@ -546,6 +538,53 @@ function UploadPage() {
             />
           </>
         )}
+      </Modal>
+      {/* ── Delete Confirmation Modal — เด่นชัด บังคับพิมพ์ยืนยัน ── */}
+      <Modal
+       title={
+          <span style={{ color: "#cf1322" }}>
+            <WarningFilled style={{ marginRight: 8 }} />
+           ยืนยันการลบข้อมูลทั้งตาราง
+         </span>
+       }
+        open={!!deleteTarget}
+        onCancel={() => setDeleteTarget(null)}
+        footer={[
+          <Button key="cancel" onClick={() => setDeleteTarget(null)}>
+           ยกเลิก
+          </Button>,
+          <Button
+           key="confirm"
+            danger
+           type="primary"
+           disabled={deleteConfirmText !== deleteTarget?.table_name}
+           onClick={confirmDelete}
+          >
+            ลบถาวร — ไม่สามารถกู้คืนได้
+         </Button>,
+        ]}
+      >
+        {deleteTarget && (
+          <>
+           <Alert
+              type="error"
+              showIcon
+             icon={<WarningFilled />}
+             style={{ marginBottom: 16, fontWeight: 500 }}
+             message={`กำลังจะลบข้อมูล ${deleteTarget.row_count} แถว ในตาราง "${deleteTarget.label}"`}
+             description="การกระทำนี้ลบข้อมูลทั้งหมดออกจากฐานข้อมูลทันทีและไม่สามารถกู้คืนได้ ต้องอัปโหลดไฟล์ใหม่เพื่อกู้ข้อมูลกลับ"
+           />
+           <p style={{ marginBottom: 8, fontSize: 13 }}>
+              พิมพ์ชื่อตาราง <b style={{ color: "#cf1322" }}>{deleteTarget.table_name}</b> เพื่อยืนยัน
+            </p>
+            <Input
+             placeholder={deleteTarget.table_name}
+             value={deleteConfirmText}
+              onChange={(e) => setDeleteConfirmText(e.target.value)}
+             status={deleteConfirmText && deleteConfirmText !== deleteTarget.table_name ? "error" : ""}
+            />
+         </>
+       )}
       </Modal>
     </Layout>
   );
