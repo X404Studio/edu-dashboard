@@ -99,7 +99,7 @@ function StudentPage() {
     });
   }, [retainData, selectedMajor, selectedYear, searchText]);
 
-  // 📊 คำนวณสถิตินิสิตทั้งหมด รวมทั้งแยก ปริญญาตรี และ ปริญญาโท (รหัสสาขาขึ้นต้นด้วย X)
+  // คำนวณสถิตินิสิตทั้งหมด รวมทั้งแยก ปริญญาตรี และ ปริญญาโท (รหัสสาขาขึ้นต้นด้วย X)
   const studentStats = useMemo(() => {
     let totalAdmitted = 0;
     let totalRetained = 0;
