@@ -45,55 +45,35 @@ function StudentStatus() {
       .then(setDashboardData);
   }, []);
 
-  // 🎯 หัวใจหลักการแกะตาราง: ล็อกตำแหน่งดัชนีคอลัมน์ตามโครงสร้างไฟล์จริง
   const parsedData = useMemo(() => {
-    let rawList = dashboardData?.["ข้อมูลสถานภาพนิสิต"] || [];
-    
-    if (rawList && !Array.isArray(rawList) && rawList["ข้อมูลสถานภาพนิสิต"]) {
-      rawList = rawList["ข้อมูลสถานภาพนิสิต"];
-    }
-    
-    if (!Array.isArray(rawList) || rawList.length === 0) {
-      return { dropouts: [], dismissals: [], expels: [] };
-    }
+  if (!dashboardData) return { dropouts: [], dismissals: [], expels: [] };
 
-    const dropouts = [];
-    const dismissals = [];
-    const expels = [];
+    const dropouts   = (dashboardData["นิสิตลาออก"] || []).map(item => ({
+      ปีการศึกษา: item["ปีการศึกษา"],
+      ชื่อสาขา: item["ชื่อสาขา"],
+      หลักสูตร: "",
+      จำนวน: Number(item["จำนวน"] || 0),
+      หมายเหตุ: item["หมายเหตุ"] || "ลาออกตามความประสงค์",
+    })).filter(r => r.จำนวน > 0);
 
-    rawList.forEach((row) => {
-      if (!row) return;
+    const dismissals = (dashboardData["นิสิตพ้นสภาพ"] || []).map(item => ({
+      ปีการศึกษา: item["ปีการศึกษา"],
+      ชื่อสาขา: item["ชื่อสาขา"],
+      หลักสูตร: "",
+      จำนวน: Number(item["จำนวน"] || 0),
+      หมายเหตุ: item["หมายเหตุ"] || "พ้นสภาพเนื่องจากผลการเรียน/เวลาเรียน",
+    })).filter(r => r.จำนวน > 0);
 
-      const rowValues = Object.values(row);
+    const expels      = (dashboardData["นิสิตถูกคัดชื่อ"] || []).map(item => ({
+      ปีการศึกษา: item["ปีการศึกษา"],
+      ชื่อสาขา: item["ชื่อสาขา"],
+      หลักสูตร: "",
+      จำนวน: Number(item["จำนวน"] || 0),
+      หมายเหตุ: item["หมายเหตุ"] || "ถูกคัดชื่อออกจากระบบคณะ",
+    })).filter(r => r.จำนวน > 0);
 
-      const degree = rowValues[0] ? String(rowValues[0]).trim() : "";
-      const major = rowValues[1] ? String(rowValues[1]).trim() : "";
-      const year = rowValues[3] ? String(rowValues[3]).trim() : "";
-
-      if (!major || major === "สาขา" || major.includes("คณะ") || !year || year.includes("ปีการศึกษา")) {
-        return; 
-      }
-
-      const dropCount1 = Number(rowValues[5]) || 0;
-      const dropCount2 = Number(rowValues[10]) || 0;
-      const totalDrop = dropCount1 + dropCount2;
-
-      const totalDismiss = Number(rowValues[6]) || 0;
-      const totalExpel = Number(rowValues[7]) || 0;
-
-      if (totalDrop > 0) {
-        dropouts.push({ ปีการศึกษา: year, ชื่อสาขา: major, หลักสูตร: degree, จำนวน: totalDrop, หมายเหตุ: "ลาออกตามความประสงค์" });
-      }
-      if (totalDismiss > 0) {
-        dismissals.push({ ปีการศึกษา: year, ชื่อสาขา: major, หลักสูตร: degree, จำนวน: totalDismiss, หมายเหตุ: "พ้นสภาพเนื่องจากผลการเรียน/เวลาเรียน" });
-      }
-      if (totalExpel > 0) {
-        expels.push({ ปีการศึกษา: year, ชื่อสาขา: major, หลักสูตร: degree, จำนวน: totalExpel, หมายเหตุ: "ถูกคัดชื่อออกจากระบบคณะ" });
-      }
-    });
-
-    return { dropouts, dismissals, expels };
-  }, [dashboardData]);
+  return { dropouts, dismissals, expels };
+}, [dashboardData]);
 
   // ฟิลเตอร์คัดเลือก ปีการศึกษา
   const years = useMemo(() => {
