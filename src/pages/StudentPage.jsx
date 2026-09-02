@@ -92,7 +92,7 @@ function StudentPage() {
       
       const majorMatch = !selectedMajor || itemMajor === selectedMajor;
       const yearMatch = !selectedYear || itemYear === selectedYear;
-      const termMatch = itemTerm === "ปลาย"; 
+      const termMatch = itemTerm === "ปลาย" || itemTerm === "ภาคปลาย"; 
       const searchMatch = !searchText || JSON.stringify(item).toLowerCase().includes(searchText.toLowerCase());
 
       return majorMatch && yearMatch && termMatch && searchMatch;
@@ -123,12 +123,12 @@ function StudentPage() {
       if (majorMatch && yearMatch) {
         const isMaster = code.startsWith("X");
 
-        if (itemTerm === "ต้น") {
+        if (itemTerm === "ต้น" || itemTerm === "ภาคต้น") {
           totalAdmitted += amt;
           if (isMaster) masterAdmitted += amt;
           else bachelorAdmitted += amt;
         }
-        if (itemTerm === "ปลาย") {
+        if (itemTerm === "ปลาย" || itemTerm === "ภาคปลาย") {
           totalRetained += amt;
           if (isMaster) masterRetained += amt;
           else bachelorRetained += amt;
