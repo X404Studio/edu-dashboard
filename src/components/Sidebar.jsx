@@ -15,7 +15,7 @@ import {
   LogoutOutlined,
   SafetyCertificateOutlined
 } from "@ant-design/icons";
-import { db } from "../pages/firebase";
+import { db } from "../firebase";
 import { doc, onSnapshot } from "firebase/firestore";
 
 const { Sider } = Layout;
@@ -28,7 +28,7 @@ function Sidebar() {
   const userName = localStorage.getItem("user") || "ผู้ใช้งาน";
   const userPicture = localStorage.getItem("picture");
 
-  const [adminList, setAdminList] = useState(["testname.01@ku.th"]);
+  const [adminList, setAdminList] = useState(["naramon.si@ku.th"]);
 
   useEffect(() => {
     const unsub = onSnapshot(doc(db, "system_config", "admins"), (docSnap) => {
@@ -40,7 +40,7 @@ function Sidebar() {
   }, []);
 
   const isAdmin = adminList.includes(userEmail);
-  const isSuperAdmin = userEmail === "testname.01@ku.th";
+  const isSuperAdmin = userEmail === "naramon.si@ku.th";
 
  
   const handleLogout = () => {

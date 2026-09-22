@@ -91,10 +91,10 @@ const LoginPage = () => {
 
         <Form layout="vertical" onFinish={handleFinish} requiredMark={false}>
           <Form.Item name="username" rules={[{ required: true, message: "กรุณากรอกชื่อผู้ใช้งาน" }]} style={{ marginBottom: 12 }}>
-            <Input prefix={<UserOutlined style={{ color: "#94a3b8" }} />} placeholder="ชื่อผู้ใช้งาน (admin)" size="large" style={{ borderRadius: 10 }} />
+            <Input prefix={<UserOutlined style={{ color: "#94a3b8" }} />} placeholder="ชื่อผู้ใช้งาน" size="large" style={{ borderRadius: 10 }} />
           </Form.Item>
           <Form.Item name="password" rules={[{ required: true, message: "กรุณากรอกรหัสผ่าน" }]} style={{ marginBottom: 16 }}>
-            <Input.Password prefix={<LockOutlined style={{ color: "#94a3b8" }} />} placeholder="รหัสผ่าน (123456)" size="large" style={{ borderRadius: 10 }} />
+            <Input.Password prefix={<LockOutlined style={{ color: "#94a3b8" }} />} placeholder="รหัสผ่าน" size="large" style={{ borderRadius: 10 }} />
           </Form.Item>
           <Form.Item style={{ marginBottom: 0 }}>
             <Button type="primary" htmlType="submit" size="large" block loading={loading} style={{ borderRadius: 10, background: "#00b4d8", borderColor: "#00b4d8", fontWeight: 600, height: 45 }}>
