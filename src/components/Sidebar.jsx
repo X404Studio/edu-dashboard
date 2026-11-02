@@ -18,7 +18,7 @@ import {
   DollarOutlined,
   SmileOutlined
 } from "@ant-design/icons";
-import { db } from "../firebase";
+import { db } from "./firebase";
 import { doc, onSnapshot } from "firebase/firestore";
 
 const { Sider } = Layout;
