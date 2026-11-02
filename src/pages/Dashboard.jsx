@@ -118,7 +118,7 @@ function Dashboard() {
   const majorsOptions = useMemo(() => {
     if (retain.length === 0) return [];
     const rawMajors = retain.map(item => cleanMajorName(item["ชื่อสาขา"] || item["สาขาวิชา"] || item["สาขา"]));
-    const combined = [...new Set([...rawMajors, ...EXTRA_MAJORS])].filter(Boolean);
+    const combined = [...new Set([...rawMajors])].filter(Boolean);
 
     const bachelorMajors = combined.filter(m => !isMasterOrXMajor(m)).sort();
     const masterMajors = combined.filter(m => isMasterOrXMajor(m)).sort();
