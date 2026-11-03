@@ -31,11 +31,11 @@ function GraduateQualityPage() {
   const [rawData, setRawData] = useState([]);
   const [tableYearFilter, setTableYearFilter] = useState("");
 
+  // สเตตสำหรับแบนเนอร์วิเคราะห์แนวโน้ม
   const [trendYear, setTrendYear] = useState("");
   const [trendMajor, setTrendMajor] = useState("");
-  const trendRange = "4";
 
-  // 1. โหลดข้อมูลจริงจาก Database
+  // โหลดข้อมูลจริงจาก Database
   const [dashboardData, setDashboardData] = useState(null);
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/dashboard-data`)
@@ -60,7 +60,7 @@ function GraduateQualityPage() {
     return match ? match[0] : String(yearStr).trim();
   };
 
-  // 2. ดึงรายการ ปีการศึกษา และ สาขาวิชา ทั้งหมดมาทำ Dropdown
+  // ดึงรายการ ปีการศึกษา และ สาขาวิชา ทั้งหมดมาทำ Dropdown
   const years = useMemo(() => {
     const list = rawData.map(item => extractYear(item["ปีการศึกษา"]));
     return [...new Set(list)].filter(Boolean).sort().reverse();
@@ -75,7 +75,7 @@ function GraduateQualityPage() {
     setAppliedFilters({ year: selectedYear, major: selectedMajor });
   };
 
-  // 3. จัดกลุ่มข้อมูลสำหรับคำนวณ KPI และ กราฟแท่ง
+  // จัดกลุ่มข้อมูลสำหรับคำนวณ KPI และ กราฟแท่ง
   const processedData = useMemo(() => {
     const groups = {};
 
@@ -105,7 +105,7 @@ function GraduateQualityPage() {
     return Object.values(groups);
   }, [rawData, appliedFilters]);
 
-  // 4. จัดกลุ่มข้อมูลสำหรับตารางด้านล่าง
+  // จัดกลุ่มข้อมูลสำหรับตารางด้านล่าง
   const tableData = useMemo(() => {
     const groups = {};
 
@@ -135,7 +135,7 @@ function GraduateQualityPage() {
     return Object.values(groups);
   }, [rawData, tableYearFilter, appliedFilters.major]);
 
-  // 5. คำนวณค่าเฉลี่ยรวมสรุป KPI
+  // คำนวณค่าเฉลี่ยรวมสรุป KPI
   const stats = useMemo(() => {
     if (processedData.length === 0) return { d1: "0.00", d2: "0.00", d3: "0.00", d4: "0.00", d5: "0.00", avg: "0.00" };
     
@@ -161,7 +161,6 @@ function GraduateQualityPage() {
     };
   }, [processedData]);
 
-  // 🎨 กำหนดชุดสีของแต่ละแท่งสำหรับกราฟแผนภูมิเปรียบเทียบค่าเฉลี่ยรายด้าน (TQF)
   const tqfColors = [
     "#c5979d", 
     "#4b8f8c", 
@@ -178,7 +177,7 @@ function GraduateQualityPage() {
     { name: "ไอที/วิเคราะห์", score: Number(stats.d5) },
   ];
 
-  // 6. ระบบประมวลผลข้อมูลแนวโน้มย้อนหลังล็อกเป๊ะที่ 4 ปี
+  // ระบบประมวลผลข้อมูลแนวโน้ม
   const trendChartsData = useMemo(() => {
     let filtered = rawData;
 
@@ -245,12 +244,7 @@ function GraduateQualityPage() {
     result.sort((a, b) => a.rawYear - b.rawYear);
 
     if (trendYear) {
-      const targetYearInt = Number(trendYear);
-      const limit = Number(trendRange);
-      result = result.filter(d => d.rawYear <= targetYearInt && d.rawYear > (targetYearInt - limit));
-    } else {
-      const limit = Number(trendRange);
-      result = result.slice(-limit);
+      result = result.filter(d => d.rawYear === Number(trendYear));
     }
 
     return result;
@@ -274,7 +268,7 @@ function GraduateQualityPage() {
         <Header style={{ background: "white", padding: "16px 24px", height: "auto", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #f0f0f0" }}>
           <div>
             <h2 style={{ margin: "0 0 4px 0", fontSize: "20px", fontWeight: "600", color: "#1f1f1f", lineHeight: "1.2" }}>ผลการประเมินคุณภาพบัณฑิต</h2>
-            <div style={{ color: "#8c8c8c", fontSize: "13px", lineHeight: "1.4" }}>วิเคราะห์ระดับความพึงพอใจของผู้ใช้บัณฑิตตามกรอบมาตรฐาน TQF 5 ด้าน</div>
+            <div style={{ color: "#8c8c8c", fontSize: "13px", lineHeight: "1.4" }}>วิเคราะห์ระดับความพึงพอใจของผู้ใช้บัณฑิตตามกรอบมาตรฐาน 5 ด้าน</div>
           </div>
         </Header>
 
@@ -352,9 +346,9 @@ function GraduateQualityPage() {
             </div>
           </div>
 
-          {/* GRAPH - เปลี่ยนสีแยกรายแท่ง */}
+          {/* GRAPH - เปรียบเทียบค่าเฉลี่ยรายด้าน */}
           <div style={{ background: "white", padding: 24, borderRadius: 16, marginBottom: 24 }}>
-            <h3 style={{ marginBottom: 20 }}>แผนภูมิเปรียบเทียบค่าเฉลี่ยรายด้าน (TQF)</h3>
+            <h3 style={{ marginBottom: 20 }}>แผนภูมิเปรียบเทียบค่าเฉลี่ยรายด้าน</h3>
             <div style={{ height: 350 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
@@ -379,7 +373,7 @@ function GraduateQualityPage() {
             </div>
           </div>
 
-          {/* 7. แถบตัวกรองแนวโน้มคุณภาพบัณฑิตย้อนหลัง */}
+          {/* แถบตัวกรองแนวโน้มคุณภาพบัณฑิต */}
           <div style={{
             background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
             padding: "24px 32px",
@@ -394,9 +388,9 @@ function GraduateQualityPage() {
           }}>
             <div>
               <h3 style={{ color: "#ffffff", fontSize: "22px", fontWeight: "600", margin: 0, letterSpacing: "-0.5px" }}>
-                วิเคราะห์แนวโน้มคุณภาพบัณฑิตย้อนหลัง 4 ปี (TQF)
+                วิเคราะห์แนวโน้มคุณภาพบัณฑิต
               </h3>
-              <p style={{ color: "#94a3b8", fontSize: "13px", margin: "4px 0 0 0" }}>เปรียบเทียบสถิติและผลประเมินย้อนหลัง 4 ปีการศึกษาเพื่อวิเคราะห์คุณภาพอย่างต่อเนื่อง</p>
+              <p style={{ color: "#94a3b8", fontSize: "13px", margin: "4px 0 0 0" }}>เปรียบเทียบสถิติและผลประเมินเพื่อวิเคราะห์คุณภาพอย่างต่อเนื่อง</p>
             </div>
             
             <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", color: "#e2e8f0", fontSize: "13px" }}>
@@ -418,20 +412,19 @@ function GraduateQualityPage() {
             </div>
           </div>
 
-          {/* 8. โซนแสดงกราฟแนวโน้มย้อนหลัง 6 ด้านตามมาตรฐาน TQF */}
+          {/* โซนแสดงกราฟแนวโน้ม 6 ด้านตามมาตรฐาน TQF */}
           {(() => {
             const yearlyColors = ["#173b6f", "#3071a4", "#87b8e5", "#b8aab4"];
-            const currentRangeText = "ย้อนหลัง 4 ปี";
 
             return (
               <div style={{ marginBottom: 32 }}>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
                   
-                  {/* 📊 กราฟที่ 1: คะแนนเฉลี่ยรวมทุกด้าน */}
+                  {/* กราฟที่ 1: คะแนนเฉลี่ยรวมทุกด้าน */}
                   <Card bodyStyle={{ padding: "20px" }} style={{ borderRadius: 16, boxShadow: "0 1px 3px rgba(0,0,0,0.05)", border: "1px solid #f1f5f9", background: "#ffffff" }}>
                     <div style={{ textAlign: "center", marginBottom: 16, minHeight: "44px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <h4 style={{ margin: 0, fontSize: "13px", fontWeight: "600", color: "#334155", lineHeight: "1.4" }}>
-                        คะแนนเฉลี่ยรวมทุกด้านความพึงพอใจ {currentRangeText}
+                        คะแนนเฉลี่ยรวมทุกด้านความพึงพอใจ
                       </h4>
                     </div>
                     <div style={{ height: 190, width: "100%" }}>
@@ -463,11 +456,11 @@ function GraduateQualityPage() {
                     </div>
                   </Card>
 
-                  {/* 📊 กราฟที่ 2: คุณธรรม จริยธรรม */}
+                  {/* กราฟที่ 2: คุณธรรม จริยธรรม */}
                   <Card bodyStyle={{ padding: "20px" }} style={{ borderRadius: 16, boxShadow: "0 1px 3px rgba(0,0,0,0.05)", border: "1px solid #f1f5f9", background: "#ffffff" }}>
                     <div style={{ textAlign: "center", marginBottom: 16, minHeight: "44px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <h4 style={{ margin: 0, fontSize: "13px", fontWeight: "600", color: "#334155", lineHeight: "1.4" }}>
-                        คะแนนเฉลี่ยด้านคุณธรรม จริยธรรม {currentRangeText}
+                        คะแนนเฉลี่ยด้านคุณธรรม จริยธรรม
                       </h4>
                     </div>
                     <div style={{ height: 190, width: "100%" }}>
@@ -499,11 +492,11 @@ function GraduateQualityPage() {
                     </div>
                   </Card>
 
-                  {/* 📊 กราฟที่ 3: ด้านความรู้ */}
+                  {/* กราฟที่ 3: ด้านความรู้ */}
                   <Card bodyStyle={{ padding: "20px" }} style={{ borderRadius: 16, boxShadow: "0 1px 3px rgba(0,0,0,0.05)", border: "1px solid #f1f5f9", background: "#ffffff" }}>
                     <div style={{ textAlign: "center", marginBottom: 16, minHeight: "44px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <h4 style={{ margin: 0, fontSize: "13px", fontWeight: "600", color: "#334155", lineHeight: "1.4" }}>
-                        คะแนนเฉลี่ยด้านความรู้ {currentRangeText}
+                        คะแนนเฉลี่ยด้านความรู้
                       </h4>
                     </div>
                     <div style={{ height: 190, width: "100%" }}>
@@ -535,11 +528,11 @@ function GraduateQualityPage() {
                     </div>
                   </Card>
 
-                  {/* 📊 กราฟที่ 4: ทักษะทางปัญญา */}
+                  {/* กราฟที่ 4: ทักษะทางปัญญา */}
                   <Card bodyStyle={{ padding: "20px" }} style={{ borderRadius: 16, boxShadow: "0 1px 3px rgba(0,0,0,0.05)", border: "1px solid #f1f5f9", background: "#ffffff" }}>
                     <div style={{ textAlign: "center", marginBottom: 16, minHeight: "44px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <h4 style={{ margin: 0, fontSize: "13px", fontWeight: "600", color: "#334155", lineHeight: "1.4" }}>
-                        คะแนนเฉลี่ยด้านทักษะทางปัญญา {currentRangeText}
+                        คะแนนเฉลี่ยด้านทักษะทางปัญญา
                       </h4>
                     </div>
                     <div style={{ height: 190, width: "100%" }}>
@@ -571,11 +564,11 @@ function GraduateQualityPage() {
                     </div>
                   </Card>
 
-                  {/* 📊 กราฟที่ 5: ทักษะความสัมพันธ์ระหว่างบุคคล */}
+                  {/* กราฟที่ 5: ทักษะความสัมพันธ์ระหว่างบุคคล */}
                   <Card bodyStyle={{ padding: "20px" }} style={{ borderRadius: 16, boxShadow: "0 1px 3px rgba(0,0,0,0.05)", border: "1px solid #f1f5f9", background: "#ffffff" }}>
                     <div style={{ textAlign: "center", marginBottom: 16, minHeight: "44px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <h4 style={{ margin: 0, fontSize: "11px", fontWeight: "600", color: "#334155", lineHeight: "1.4" }}>
-                        คะแนนเฉลี่ยด้านทักษะความสัมพันธ์ระหว่างบุคคลและความรับผิดชอบ {currentRangeText}
+                        คะแนนเฉลี่ยด้านทักษะความสัมพันธ์ระหว่างบุคคลและความรับผิดชอบ
                       </h4>
                     </div>
                     <div style={{ height: 190, width: "100%" }}>
@@ -607,11 +600,11 @@ function GraduateQualityPage() {
                     </div>
                   </Card>
 
-                  {/* 📊 กราฟที่ 6: ทักษะวิเคราะห์ตัวเลข/สื่อสาร/ไอที */}
+                  {/* กราฟที่ 6: ทักษะวิเคราะห์ตัวเลข/สื่อสาร/ไอที */}
                   <Card bodyStyle={{ padding: "20px" }} style={{ borderRadius: 16, boxShadow: "0 1px 3px rgba(0,0,0,0.05)", border: "1px solid #f1f5f9", background: "#ffffff" }}>
                     <div style={{ textAlign: "center", marginBottom: 16, minHeight: "44px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <h4 style={{ margin: 0, fontSize: "11px", fontWeight: "600", color: "#334155", lineHeight: "1.4" }}>
-                        คะแนนเฉลี่ยด้านวิเคราะห์เชิงตัวเลข การสื่อสาร และไอที {currentRangeText}
+                        คะแนนเฉลี่ยด้านวิเคราะห์เชิงตัวเลข การสื่อสาร และไอที
                       </h4>
                     </div>
                     <div style={{ height: 190, width: "100%" }}>
@@ -646,7 +639,7 @@ function GraduateQualityPage() {
                 </div>
               </div>
             );
-          })()} {/* 👈 ปิดวงเล็บ Arrow Function ที่ขาดไป */}
+          })()} 
 
           {/* TABLE ZONE */}
           <div style={{ background: "white", padding: 24, borderRadius: 16 }}>
