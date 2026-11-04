@@ -90,7 +90,7 @@ function Sidebar() {
     },
     // 2. เพิ่มเมนูความพึงพอใจนิสิตต่อจากผลประเมินคุณภาพบัณฑิต
     { 
-      key: "/student-satisfaction", 
+      key: "/students", 
       icon: <SmileOutlined style={{ color: "#14b8a6" }} />, 
       label: "ความพึงพอใจนิสิต" 
     },
