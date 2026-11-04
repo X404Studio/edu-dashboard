@@ -36,6 +36,7 @@ function StudentSatisfactionPage() {
   const [trendMajor, setTrendMajor] = useState("");
 
   // โหลดข้อมูลจริงจาก Database
+  const [dashboardData, setDashboardData] = useState(null);
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/dashboard-data`)
       .then(r => r.json())
