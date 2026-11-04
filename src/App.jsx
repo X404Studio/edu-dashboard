@@ -10,6 +10,7 @@ import StudentPage from "./pages/StudentPage";
 import FacultyPage from "./pages/FacultyPage";
 import SummaryPage from "./pages/SummaryPage";
 import StudentStatus from "./pages/StudentStatus";
+import StudentSatisfactionPage from "./pages/StudentSatisfactionPage";
 import EvaluationPage from "./pages/EvaluationPage";
 import GraduateQualityPage from "./pages/GraduateQualityPage";
 import CoursePage from "./pages/CoursePage";
