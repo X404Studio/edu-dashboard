@@ -53,6 +53,7 @@ function App() {
             <Route path="/faculty" element={<FacultyPage />} />
             <Route path="/summary" element={<SummaryPage />} />
             <Route path="/student-status" element={<StudentStatus />} />
+            <Route path="/student-satisfaction" element={<StudentSatisfactionPage />} />
             <Route path="/evaluation" element={<EvaluationPage />} />
             <Route path="/graduate-quality" element={<GraduateQualityPage />} />
             <Route path="/courses" element={<CoursePage />} />

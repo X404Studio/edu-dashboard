@@ -58,7 +58,7 @@ function Sidebar() {
   };
 
   const topMenuItems = [
-    // --- 1. หมวดภาพรวม & บริหาร (สีเขียว) ---
+    // --- 1. หมวดภาพรวม & บริหาร ---
     { 
       key: "/", 
       icon: <DashboardOutlined style={{ color: "#10b981" }} />, 
@@ -67,7 +67,7 @@ function Sidebar() {
 
     { type: "divider", style: { borderColor: "rgba(255, 255, 255, 0.1)", margin: "8px 12px" } },
 
-    // --- 2. หมวดข้อมูลนิสิต & บัณฑิต (สีฟ้า / น้ำเงิน) ---
+    // --- 2. หมวดข้อมูลนิสิต & บัณฑิต ---
     { 
       key: "/students", 
       icon: <TeamOutlined style={{ color: "#38bdf8" }} />, 
@@ -88,16 +88,16 @@ function Sidebar() {
       icon: <IdcardOutlined style={{ color: "#06b6d4" }} />, 
       label: "ผลประเมินคุณภาพบัณฑิต" 
     },
-    // 2. เพิ่มเมนูความพึงพอใจนิสิตต่อจากผลประเมินคุณภาพบัณฑิต
+
     { 
-      key: "/students", 
+      key: "/student-satisfaction", 
       icon: <SmileOutlined style={{ color: "#14b8a6" }} />, 
       label: "ความพึงพอใจนิสิต" 
     },
 
     { type: "divider", style: { borderColor: "rgba(255, 255, 255, 0.1)", margin: "8px 12px" } },
 
-    // --- 3. หมวดข้อมูลอาจารย์ & การเรียนการสอน (สีส้ม / ทอง) ---
+    // --- 3. หมวดข้อมูลอาจารย์ & การเรียนการสอน ---
     { 
       key: "/faculty", 
       icon: <UserOutlined style={{ color: "#f59e0b" }} />, 
@@ -115,7 +115,7 @@ function Sidebar() {
     },
   ];
 
-  // --- 4. หมวดสำหรับ Admin (สีม่วง / ชมพู / แดง) ---
+  // --- 4. หมวดสำหรับ Admin ---
   const bottomMenuItems = [];
 
   if (isAdmin) {
