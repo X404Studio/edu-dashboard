@@ -409,7 +409,10 @@ function Dashboard() {
               <Button 
                 shape="circle" 
                 icon={<ReloadOutlined />} 
-                onClick={loadDashboardData}
+                onClick={() => setAppliedFilters({
+                  years: selectedYears,
+                  majors: selectedMajors
+                })}
                 style={{ borderColor: "#cbd5e1", color: "#64748b" }}
               />
             </AntTooltip>
