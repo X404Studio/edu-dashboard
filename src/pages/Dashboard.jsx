@@ -272,7 +272,7 @@ function Dashboard() {
     let bachelorRetained = 0;
     let masterAdmitted = 0;
     let masterRetained = 0;
-    let lecturers = 66;
+    let lecturers = 0;
     let graduates = 0;
 
     if (dashboardData && Object.keys(dashboardData).length > 0) {
