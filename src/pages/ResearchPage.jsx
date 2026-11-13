@@ -44,7 +44,6 @@ function ResearchPage() {
   const [loading, setLoading] = useState(true);
 
   // Raw data จาก localStorage สำหรับทั้ง 3 ไฟล์
-  const [dashboardData, setDashboardData] = useState(null);
   const [researchDataList, setResearchDataList] = useState([]);
   const [ipDataList, setIpDataList] = useState([]);
   const [hIndexDataList, setHIndexDataList] = useState([]);
@@ -80,9 +79,7 @@ function ResearchPage() {
 
   // โหลดข้อมูลทั้ง 3 ไฟล์วิจัยจาก localStorage
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/dashboard-data`)
-      .then(r => r.json())
-      .then(setDashboardData);
+    const stored = localStorage.getItem("dashboardData");
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
