@@ -24,9 +24,6 @@ import {
   ReloadOutlined
 } from "@ant-design/icons";
 
-import { db } from "./firebase";
-import { doc, onSnapshot } from "firebase/firestore";
-
 const { Header, Content } = Layout;
 
 // รายการสาขาวิชาเพิ่มเติม
