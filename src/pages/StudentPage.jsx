@@ -478,7 +478,11 @@ function StudentPage() {
             <Button 
               shape="circle" 
               icon={<ReloadOutlined />} 
-              onClick={loadDashboardData}
+              onClick={() =>
+                  fetch(`${import.meta.env.VITE_API_URL}/api/dashboard-data`)
+                  .then((r) => r.json())
+                  .then(setDashboardData)
+                }
               style={{ borderColor: "#cbd5e1", color: "#64748b" }}
             />
           </Space>
