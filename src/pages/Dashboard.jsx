@@ -453,15 +453,15 @@ function Dashboard() {
           borderBottom: "1px solid #e2e8f0",
           boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.03)"
         }}>
-         
+        
           <div style={{ display: "flex", flexDirection: "column", gap: "0px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "0px" }}>
               <h1 style={{ margin: 0, fontSize: "22px", fontWeight: "800", color: "#0f172a", lineHeight: "1.2" }}>
                 ระบบสารสนเทศด้านการศึกษาเพื่อการบริหารและพัฒนาคณะวิทยาศาสตร์ ศรีราชา
               </h1>
-              <Tag color="blue" style={{ borderRadius: "12px", padding: "1px 10px", fontWeight: "600" }}>
-                คณะวิทยาศาสตร์ ศรีราชา
-              </Tag>
+              {/*<Tag color="blue" style={{ borderRadius: "12px", padding: "1px 10px", fontWeight: "600" }}>
+              คณะวิทยาศาสตร์ ศรีราชา
+              </Tag>*/}
             </div>
             <p style={{ color: "#64748b", fontSize: "13px", margin: "2px 0 0 0", lineHeight: "1.2" }}>
              [Education Management Information System (EMIS) for Faculty of Science, Sriracha]
