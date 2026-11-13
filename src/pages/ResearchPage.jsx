@@ -79,22 +79,22 @@ function ResearchPage() {
 
   // โหลดข้อมูลทั้ง 3 ไฟล์วิจัยจาก localStorage
   useEffect(() => {
-      fetch(`${import.meta.env.VITE_API_URL}/api/dashboard-data`)
-        .then(r => r.json())
-        .then(setDashboardData);
-    }, []);
-    try {
+    fetch(`${import.meta.env.VITE_API_URL}/api/dashboard-data`)
+      .then(r => r.json())
+      .then(setDashboardData);
+    if (stored) {
+      try {
         const parsed = JSON.parse(stored);
         
-        // ไฟล์ผลงานวิจัย
+        // 1. ไฟล์ผลงานวิจัย
         const resList = parsed["ข้อมูลวิจัย(จำนวนผลงานวิจัย)"] || parsed["จำนวนผลงานวิจัย"] || parsed["ข้อมูลวิจัย"] || [];
         setResearchDataList(Array.isArray(resList) ? resList : []);
 
-        // ไฟล์ทรัพย์สินทางปัญญา
+        // 2. ไฟล์ทรัพย์สินทางปัญญา
         const ipList = parsed["ข้อมูลวิจัย(จำนวนทรัพย์สินทางปัญญา)"] || parsed["จำนวนทรัพย์สินทางปัญญา"] || parsed["ทรัพย์สินทางปัญญา"] || [];
         setIpDataList(Array.isArray(ipList) ? ipList : []);
 
-        // ไฟล์ H-Index
+        // 3. ไฟล์ H-Index
         const hList = parsed["ข้อมูลวิจัย(ค่า H-Index)"] || parsed["ค่า H-Index"] || parsed["H-Index"] || [];
         setHIndexDataList(Array.isArray(hList) ? hList : []);
 
@@ -106,7 +106,8 @@ function ResearchPage() {
       } catch (e) {
         console.error("Error reading research data:", e);
       }
-    };
+    }
+  }, []);
 
   // --- 1. ตัวเลือก Dropdown ผลงานวิจัย ---
   const scopusOptions = useMemo(() => {
@@ -514,6 +515,6 @@ function ResearchPage() {
       </Layout>
     </Layout>
   );
-
+}
 
 export default ResearchPage;
