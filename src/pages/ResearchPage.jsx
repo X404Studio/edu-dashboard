@@ -44,6 +44,7 @@ function ResearchPage() {
   const [loading, setLoading] = useState(true);
 
   // Raw data จาก localStorage สำหรับทั้ง 3 ไฟล์
+  const [dashboardData, setDashboardData] = useState(null);
   const [researchDataList, setResearchDataList] = useState([]);
   const [ipDataList, setIpDataList] = useState([]);
   const [hIndexDataList, setHIndexDataList] = useState([]);
