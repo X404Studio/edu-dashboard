@@ -19,10 +19,6 @@ import {
 } from "recharts";
 import { SearchOutlined } from "@ant-design/icons";
 
-import { db } from "./firebase";
-import { collection, onSnapshot, query } from "firebase/firestore";
-
-
 const { Header, Content } = Layout;
 
 // 1. COMPONENT ตารางรายละเอียด 
