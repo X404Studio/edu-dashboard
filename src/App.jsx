@@ -15,6 +15,7 @@ import EvaluationPage from "./pages/EvaluationPage";
 import GraduateQualityPage from "./pages/GraduateQualityPage";
 import CoursePage from "./pages/CoursePage";
 import AdminManagementPage from "./pages/AdminManagementPage";
+import ResearchPage from "./pages/ResearchPage";
 
 const GOOGLE_CLIENT_ID = "279564406031-jmit17s4jtcvrnbdolg8glqhdp9divj5.apps.googleusercontent.com";
 
@@ -63,6 +64,7 @@ function App() {
           {/* ล็อกเฉพาะ Admin เข้าได้ */}
           <Route element={<AdminRoute />}>
             <Route path="/upload" element={<UploadPage />} />
+            <Route path="/research" element={<ResearchPage />} />
             <Route path="/admin-management" element={<AdminManagementPage />} />
           </Route>
 
