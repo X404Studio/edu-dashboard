@@ -135,31 +135,32 @@ function Dashboard() {
     return dashboardData["student_retain"] || dashboardData["นิสิตคงอยู่"] || dashboardData["ข้อมูลนิสิตคงอยู่"] || dashboardData["จำนวนนิสิตคงอยู่"] || dashboardData["student_retain_data"] || [];
   }, [dashboardData]);
 
-  // ดึงข้อมูลภาวะการมีงานทำแบบล็อกเฉพาะ Key แรกที่พบ
+  // 🔹 ดึงข้อมูลภาวะการมีงานทำแบบล็อกเฉพาะ Key แรกที่พบ
   const employmentList = useMemo(() => {
     if (!dashboardData || Object.keys(dashboardData).length === 0) return [];
-      if (dashboardData["ภาวะการมีงานทำ"] && Array.isArray(dashboardData["ภาวะการมีงานทำ"]) && dashboardData["ภาวะการมีงานทำ"].length > 0) {
-       return dashboardData["ภาวะการมีงานทำ"];
-     }
-      if (dashboardData["ข้อมูลภาวะการมีงานทำ"] && Array.isArray(dashboardData["ข้อมูลภาวะการมีงานทำ"]) && dashboardData["ข้อมูลภาวะการมีงานทำ"].length > 0) {
-       return dashboardData["ข้อมูลภาวะการมีงานทำ"];
-     }
-     if (dashboardData["employment_status"] && Array.isArray(dashboardData["employment_status"]) && dashboardData["employment_status"].length > 0) {
-       return dashboardData["employment_status"];
-     }
-     if (dashboardData["ผู้สำเร็จการศึกษา"] && Array.isArray(dashboardData["ผู้สำเร็จการศึกษา"]) && dashboardData["ผู้สำเร็จการศึกษา"].length > 0) {
-       return dashboardData["ผู้สำเร็จการศึกษา"];
-     }
+    
+    if (dashboardData["ภาวะการมีงานทำ"] && Array.isArray(dashboardData["ภาวะการมีงานทำ"]) && dashboardData["ภาวะการมีงานทำ"].length > 0) {
+      return dashboardData["ภาวะการมีงานทำ"];
+    }
+    if (dashboardData["ข้อมูลภาวะการมีงานทำ"] && Array.isArray(dashboardData["ข้อมูลภาวะการมีงานทำ"]) && dashboardData["ข้อมูลภาวะการมีงานทำ"].length > 0) {
+      return dashboardData["ข้อมูลภาวะการมีงานทำ"];
+    }
+    if (dashboardData["employment_status"] && Array.isArray(dashboardData["employment_status"]) && dashboardData["employment_status"].length > 0) {
+      return dashboardData["employment_status"];
+    }
+    if (dashboardData["ผู้สำเร็จการศึกษา"] && Array.isArray(dashboardData["ผู้สำเร็จการศึกษา"]) && dashboardData["ผู้สำเร็จการศึกษา"].length > 0) {
+      return dashboardData["ผู้สำเร็จการศึกษา"];
+    }
     return dashboardData["graduates"] || [];
   }, [dashboardData]);
 
   const entryYears = useMemo(() => {
-    const list = retain.map(item => extractYear(item["ปีการศึกษาที่รับเข้า"] || item["ปีการศึกษา"]));
+    const list = retain.map(item => extractYear(getCleanItemValue(item, ["ปีการศึกษาที่รับเข้า", "ปีการศึกษา"])));
     return [...new Set(list)].filter(Boolean).sort().reverse();
   }, [retain]);
 
   const surveyYears = useMemo(() => {
-    const list = retain.map(item => extractYear(item["ปีที่สำรวจ"]));
+    const list = retain.map(item => extractYear(getCleanItemValue(item, ["ปีที่สำรวจ"])));
     return [...new Set(list)].filter(Boolean).sort().reverse();
   }, [retain]);
 
@@ -173,16 +174,14 @@ function Dashboard() {
   }, [entryYears, surveyYears, graphEntryYear, graphSurveyYear]);
 
   const yearsOptions = useMemo(() => {
-    const retainYears = retain.map((item) => extractYear(item["ปีที่สำรวจ"] || item["ปีการศึกษาที่รับเข้า"]));
+    const retainYears = retain.map((item) => extractYear(getCleanItemValue(item, ["ปีที่สำรวจ", "ปีการศึกษาที่รับเข้า"])));
     return [...new Set(retainYears)].filter(Boolean).sort();
   }, [retain]);
 
   const majorsOptions = useMemo(() => {
     if (retain.length === 0) return [];
-    const rawMajors = retain.map(item => cleanMajorName(item["ชื่อสาขา"] || item["สาขาวิชา"] || item["สาขา"]));
+    const rawMajors = retain.map(item => cleanMajorName(getCleanItemValue(item, ["ชื่อสาขา", "สาขาวิชา", "สาขา"])));
     const combined = [...new Set([...rawMajors, ...EXTRA_MAJORS])].filter(Boolean);
-
-    const filteredCombined = combined.filter(m => !EXCLUDED_MAJORS.includes(m));
 
     const bachelorMajors = combined.filter(m => !isMasterOrXMajor(m)).sort();
     const masterMajors = combined.filter(m => isMasterOrXMajor(m)).sort();
@@ -239,7 +238,7 @@ function Dashboard() {
       if (itemEntryYear !== graphEntryYear || itemSurveyYear !== graphSurveyYear) return;
 
       const rawName = cleanMajorName(getCleanItemValue(item, ["ชื่อสาขา", "สาขาวิชา", "สาขา"]));
-      if (!rawName || EXCLUDED_MAJORS.includes(rawName)) return;
+      if (!rawName) return;
 
       const majorKey = cleanString(rawName);
       const term = String(getCleanItemValue(item, ["ภาคเรียน", "ภาคการศึกษา"]) || "").trim();
@@ -293,8 +292,6 @@ function Dashboard() {
       // คำนวณนิสิตคงอยู่
       retain.forEach((item) => {
         const retMajorClean = cleanMajorName(getCleanItemValue(item, ["ชื่อสาขา", "สาขาวิชา", "สาขา"]));
-        if (EXCLUDED_MAJORS.includes(retMajorClean)) return;
-
         const retYear = extractYear(getCleanItemValue(item, ["ปีที่สำรวจ", "ปีการศึกษาที่รับเข้า"]));
         const retTerm = String(getCleanItemValue(item, ["ภาคเรียน", "ภาคการศึกษา"]) || "").trim();
         const amt = Number(getCleanItemValue(item, ["จำนวน", "รวม"]) || 0);
