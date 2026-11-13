@@ -25,7 +25,7 @@ import {
   Legend
 } from "recharts";
 import { db } from "./firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 
 const { Header, Content } = Layout;
 
