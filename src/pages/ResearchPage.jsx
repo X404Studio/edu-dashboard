@@ -24,6 +24,8 @@ import {
   Cell,
   Legend
 } from "recharts";
+import { db } from "./firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 const { Header, Content } = Layout;
 
