@@ -25,6 +25,7 @@ import {
 } from "@ant-design/icons";
 
 const { Header, Content } = Layout;
+const ACADEMIC_LECTURER_ADJUSTMENT = 32;
 
 // รายการสาขาวิชาเพิ่มเติม
 const EXTRA_MAJORS = [
@@ -295,7 +296,7 @@ function Dashboard() {
     let bachelorRetained = 0;
     let masterAdmitted = 0;
     let masterRetained = 0;
-    let lecturers = 0;
+    let lecturers = ACADEMIC_LECTURER_ADJUSTMENT;
     let graduates = 0;
 
     if (dashboardData && Object.keys(dashboardData).length > 0) {
@@ -400,7 +401,7 @@ function Dashboard() {
         );
 
         if (uniqueTeacherNames.size > 0) {
-          lecturers = uniqueTeacherNames.size;
+          lecturers = uniqueTeacherNames.size + ACADEMIC_LECTURER_ADJUSTMENT;
         }
       }
     }
