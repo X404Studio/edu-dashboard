@@ -498,9 +498,6 @@ function LearningSupportPage() {
             </Row>
           </Card>
 
-          <Content style={{ padding: "24px 32px", background: "#f8fafc" }}>
-          
-          {/* BANNER สรุปข้อมูลหลัก */}
           <div
             style={{
               background: "linear-gradient(135deg, #0284c7 0%, #0369a1 100%)",
