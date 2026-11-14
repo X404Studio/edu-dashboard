@@ -442,6 +442,7 @@ function ResearchPage() {
                                 outerRadius={80}
                                 paddingAngle={4}
                                 dataKey="value"
+                                label={({ percent }) => `${(percent * 100).toFixed(1)}%`}
                               >
                                 {hIndexPieData.chartData.map((entry, index) => (
                                   <Cell key={`cell-${index}`} fill={HINDEX_COLORS[index % HINDEX_COLORS.length]} />
