@@ -431,18 +431,18 @@ function ResearchPage() {
                   >
                     {hIndexPieData.total > 0 ? (
                       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                        <div style={{ height: 220, width: "100%" }}>
+                        <div style={{ height: 245, width: "100%" }}>
                           <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
                               <Pie
                                 data={hIndexPieData.chartData}
                                 cx="50%"
                                 cy="50%"
-                                innerRadius={50}
-                                outerRadius={80}
+                                innerRadius={48}
+                                outerRadius={72}
                                 paddingAngle={4}
                                 dataKey="value"
-                                label={({ percent }) => `${(percent * 100).toFixed(1)}%`}
+                                label={({ payload }) => `${payload.percent}%`}
                               >
                                 {hIndexPieData.chartData.map((entry, index) => (
                                   <Cell key={`cell-${index}`} fill={HINDEX_COLORS[index % HINDEX_COLORS.length]} />
@@ -463,7 +463,10 @@ function ResearchPage() {
                             <div style={{ background: "#faf5ff", border: "1px solid #f3e8ff", borderRadius: 12, padding: "10px", textAlign: "center" }}>
                               <div style={{ fontSize: 12, color: "#6b21a8", fontWeight: 600 }}>H-Index ≥ 1</div>
                               <div style={{ fontSize: 18, fontWeight: 800, color: "#8b5cf6" }}>
-                                {hIndexPieData.ge1} <span style={{ fontSize: 12, color: "#a855f7", fontWeight: 500 }}>คน</span>
+                                {hIndexPieData.ge1}{" "}
+                                <span style={{ fontSize: 12, color: "#a855f7", fontWeight: 600 }}>
+                                  คน ({hIndexPieData.ge1Percent}%)
+                                </span>
                               </div>
                             </div>
                           </Col>
@@ -471,7 +474,10 @@ function ResearchPage() {
                             <div style={{ background: "#fdf2f8", border: "1px solid #fbcfe8", borderRadius: 12, padding: "10px", textAlign: "center" }}>
                               <div style={{ fontSize: 12, color: "#9d174d", fontWeight: 600 }}>H-Index &lt; 1</div>
                               <div style={{ fontSize: 18, fontWeight: 800, color: "#ec4899" }}>
-                                {hIndexPieData.lt1} <span style={{ fontSize: 12, color: "#f472b6", fontWeight: 500 }}>คน</span>
+                                {hIndexPieData.lt1}{" "}
+                                <span style={{ fontSize: 12, color: "#f472b6", fontWeight: 600 }}>
+                                  คน ({hIndexPieData.lt1Percent}%)
+                                </span>
                               </div>
                             </div>
                           </Col>
