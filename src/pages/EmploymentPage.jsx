@@ -502,14 +502,6 @@ function EmploymentPage() {
     return result;
   }, [staticDataForTable, trendYear, trendMajor, trendRange]);
 
-  if (loading) {
-    return (
-      <Layout style={{ minHeight: "100vh", justifyContent: "center", alignItems: "center", background: "#f8fafc" }}>
-        <Spin size="large" tip="กำลังโหลดข้อมูลภาวะการมีงานทำแบบ Real-time..." />
-      </Layout>
-    );
-  }
-
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sidebar />
@@ -1055,7 +1047,7 @@ function EmploymentPage() {
                       )}
                     </div>
                   </Card>
-{/* กราฟที่ 9: จำนวนบัณฑิตระดับปริญญาตรีที่ได้งานทำตรงสาขาที่จบ */}
+                  {/* กราฟที่ 9: จำนวนบัณฑิตระดับปริญญาตรีที่ได้งานทำตรงสาขาที่จบ */}
                   {(() => {
                     // ดึงข้อมูลการได้งานทำตรงสาขาแบบ Dynamic จาก trendChartsData หรือ rawData
                     const chartData = (trendChartsData || []).map(item => {

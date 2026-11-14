@@ -178,14 +178,6 @@ function ResearchPage() {
     return { chartData, total, ge1, lt1 };
   }, [hIndexDataList, selectedHIndexYear, hIndexYears]);
 
-  if (loading) {
-    return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-        <Spin size="large" tip="กำลังโหลดข้อมูล..." />
-      </div>
-    );
-  }
-
   return (
     <Layout style={{ minHeight: "100vh", background: "#f8fafc" }}>
       <Sidebar defaultSelectedKey="research" />
@@ -243,7 +235,7 @@ function ResearchPage() {
                         <BarChartOutlined style={{ color: "#0284c7", fontSize: 20 }} />
                       </div>
                       <div>
-                        <div style={{ fontSize: 16, fontWeight: 700, color: "#142549" }}>1. เปรียบเทียบจำนวนผลงานวิจัยตีพิมพ์</div>
+                        <div style={{ fontSize: 16, fontWeight: 700, color: "#142549" }}>1. สถิติงานวิจัยและตีพิมพ์</div>
                         <div style={{ fontSize: 12, color: "#94a3b8", fontWeight: 400 }}>วิเคราะห์แนวโน้มจำแนกตามฐานข้อมูลและระดับการตีพิมพ์</div>
                       </div>
                     </div>
@@ -339,7 +331,7 @@ function ResearchPage() {
                           <SafetyCertificateOutlined style={{ color: "#d97706", fontSize: 20 }} />
                         </div>
                         <div>
-                          <div style={{ fontSize: 16, fontWeight: 700, color: "#142549" }}>2. ทรัพย์สินทางปัญญา</div>
+                          <div style={{ fontSize: 16, fontWeight: 700, color: "#142549" }}>2. จำนวนทรัพย์สินทางปัญญา</div>
                           <div style={{ fontSize: 12, color: "#94a3b8", fontWeight: 400 }}>สิทธิบัตร / อนุสิทธิบัตร ของคณะฯ</div>
                         </div>
                       </div>
