@@ -16,6 +16,7 @@ import GraduateQualityPage from "./pages/GraduateQualityPage";
 import CoursePage from "./pages/CoursePage";
 import AdminManagementPage from "./pages/AdminManagementPage";
 import ResearchPage from "./pages/ResearchPage";
+import LearningSupportPage from "./pages/LearningSupportPage";
 
 const GOOGLE_CLIENT_ID = "279564406031-jmit17s4jtcvrnbdolg8glqhdp9divj5.apps.googleusercontent.com";
 
