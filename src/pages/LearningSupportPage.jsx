@@ -412,8 +412,8 @@ function LearningSupportPage() {
                   }
                 >
                   <Card.Meta
-                    title={<span style={{ fontSize: 16, fontWeight: 700 }}>อาคาร 2</span>}
-                    description="ห้องปฏิบัติการฟิสิกส์ 1 ห้อง (รวม 30 ที่นั่ง)"
+                    title={<span style={{ fontSize: 16, fontWeight: 700 }}>อาคาร 2 ปฏิบัติการวิศวกรรมศาสตร์</span>}
+                    // description="ห้องปฏิบัติการฟิสิกส์ 1 ห้อง (รวม 30 ที่นั่ง)"//
                   />
                 </Card>
               </Col>
@@ -451,8 +451,8 @@ function LearningSupportPage() {
                   }
                 >
                   <Card.Meta
-                    title={<span style={{ fontSize: 16, fontWeight: 700 }}>อาคาร 15</span>}
-                    description="ห้องปฏิบัติการคอมพิวเตอร์ 3 ห้อง, เคมี 3 ห้อง และฟิสิกส์ 2 ห้อง (รวม 330 ที่นั่ง)"
+                    title={<span style={{ fontSize: 16, fontWeight: 700 }}>อาคาร 15 ปฏิบัติการวิทยาศาสตร์และเทคโนโลยี</span>}
+                    // description="ห้องปฏิบัติการคอมพิวเตอร์ 3 ห้อง, เคมี 3 ห้อง และฟิสิกส์ 2 ห้อง (รวม 330 ที่นั่ง)"//
                   />
                 </Card>
               </Col>
@@ -490,8 +490,8 @@ function LearningSupportPage() {
                   }
                 >
                   <Card.Meta
-                    title={<span style={{ fontSize: 16, fontWeight: 700 }}>อาคาร 26</span>}
-                    description="ห้องปฏิบัติการคอมพิวเตอร์ 5 ห้อง, เคมี 2 ห้อง, ฟิสิกส์ 2 ห้อง และสิ่งแวดล้อม 4 ห้อง (รวม 451 ที่นั่ง)"
+                    title={<span style={{ fontSize: 16, fontWeight: 700 }}>อาคาร 26 คณะวิทยาศาสตร์ ศรีราชา</span>}
+                    // description="ห้องปฏิบัติการคอมพิวเตอร์ 5 ห้อง, เคมี 2 ห้อง, ฟิสิกส์ 2 ห้อง และสิ่งแวดล้อม 4 ห้อง (รวม 451 ที่นั่ง)" //
                   />
                 </Card>
               </Col>
@@ -833,7 +833,7 @@ function LearningSupportPage() {
                     </div>
 
                     <Tag color="green" icon={<EnvironmentOutlined />} style={{ borderRadius: 8, padding: "4px 8px", fontSize: 12, textAlign: "center" }}>
-                      ให้บริการ ณ อาคารกิจกรรมนิสิต
+                      ให้บริการ ณ อาคาร 9 ศูนย์กิจกรรมนิสิต
                     </Tag>
                   </div>
                 </Card>
