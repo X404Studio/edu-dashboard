@@ -175,7 +175,10 @@ function ResearchPage() {
       { name: "H-Index น้อยกว่า 1", value: lt1 }
     ];
 
-    return { chartData, total, ge1, lt1 };
+    const ge1Percent = total > 0 ? ((ge1 / total) * 100).toFixed(1) : "0.0";
+    const lt1Percent = total > 0 ? ((lt1 / total) * 100).toFixed(1) : "0.0";
+
+    return { chartData, total, ge1, lt1, ge1Percent, lt1Percent };
   }, [hIndexDataList, selectedHIndexYear, hIndexYears]);
 
   return (
@@ -442,7 +445,7 @@ function ResearchPage() {
                                 outerRadius={72}
                                 paddingAngle={4}
                                 dataKey="value"
-                                label={({ payload }) => `${payload.percent}%`}
+                                label={({ percent }) => `${(percent * 100).toFixed(1)}%`}
                               >
                                 {hIndexPieData.chartData.map((entry, index) => (
                                   <Cell key={`cell-${index}`} fill={HINDEX_COLORS[index % HINDEX_COLORS.length]} />
