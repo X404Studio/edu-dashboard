@@ -345,28 +345,7 @@ function LearningSupportPage() {
         </Header>
 
         <Content style={{ padding: "24px 32px", background: "#f8fafc" }}>
-          
-          {/* BANNER สรุปข้อมูลหลัก */}
-          <div
-            style={{
-              background: "linear-gradient(135deg, #0284c7 0%, #0369a1 100%)",
-              borderRadius: 16,
-              padding: "28px 32px",
-              color: "white",
-              marginBottom: 24,
-              boxShadow: "0 10px 25px -5px rgba(2, 132, 199, 0.25)"
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
-              <LaptopOutlined style={{ fontSize: 28, color: "#7dd3fc" }} />
-              <Title level={3} style={{ color: "white", margin: 0 }}>
-                ห้องปฏิบัติการ คณะวิทยาศาสตร์ ศรีราชา
-              </Title>
-            </div>
-            <Paragraph style={{ color: "#e0f2fe", fontSize: 15, margin: 0 }}>
-              เปิดให้บริการทั้งหมด <Text bold style={{ color: "#ffffff", fontSize: 18 }}>22 ห้อง</Text> (ห้องคอมพิวเตอร์ 8 ห้อง / ห้องปฏิบัติการเคมี 5 ห้อง / ห้องปฏิบัติการฟิสิกส์ 5 ห้อง / ห้องปฏิบัติการสิ่งแวดล้อม 4 ห้อง) รองรับนิสิตรวมทั้งสิ้น <Text bold style={{ color: "#ffffff", fontSize: 18 }}>811 ที่นั่ง</Text>
-            </Paragraph>
-          </div>
+           
 
           {/* ส่วนแสดงภาพรวมอาคาร 2, อาคาร 15 และ อาคาร 26 */}
           <Card
@@ -498,6 +477,7 @@ function LearningSupportPage() {
             </Row>
           </Card>
 
+        {/* BANNER สรุปข้อมูลห้องปฏิบัติการ */}
           <div
             style={{
               background: "linear-gradient(135deg, #0284c7 0%, #0369a1 100%)",
@@ -514,10 +494,7 @@ function LearningSupportPage() {
                 ห้องปฏิบัติการ คณะวิทยาศาสตร์ ศรีราชา
               </Title>
             </div>
-            <Paragraph style={{ color: "#e0f2fe", fontSize: 15, margin: 0 }}>
-              เปิดให้บริการทั้งหมด <Text bold style={{ color: "#ffffff", fontSize: 18 }}>22 ห้อง</Text> (ห้องคอมพิวเตอร์ 8 ห้อง / ห้องปฏิบัติการเคมี 5 ห้อง / ห้องปฏิบัติการฟิสิกส์ 5 ห้อง / ห้องปฏิบัติการสิ่งแวดล้อม 4 ห้อง) รองรับนิสิตรวมทั้งสิ้น <Text bold style={{ color: "#ffffff", fontSize: 18 }}>811 ที่นั่ง</Text>
-            </Paragraph>
-          </div>
+           
 
           {/* ========================================== */}
           {/* หมวดหมู่ที่ 1: ห้องปฏิบัติการคอมพิวเตอร์ */}
