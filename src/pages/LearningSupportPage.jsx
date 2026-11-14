@@ -494,7 +494,10 @@ function LearningSupportPage() {
                 ห้องปฏิบัติการ คณะวิทยาศาสตร์ ศรีราชา
               </Title>
             </div>
-           
+            <Paragraph style={{ color: "#e0f2fe", fontSize: 15, margin: 0 }}>
+              <Text bold style={{ color: "#ffffff", fontSize: 18 }}>22 ห้อง</Text> (ห้องคอมพิวเตอร์ 8 ห้อง / ห้องปฏิบัติการเคมี 5 ห้อง / ห้องปฏิบัติการฟิสิกส์ 5 ห้อง / ห้องปฏิบัติการสิ่งแวดล้อม 4 ห้อง) รองรับนิสิตรวมทั้งสิ้น <Text bold style={{ color: "#ffffff", fontSize: 18 }}>811 ที่นั่ง</Text>
+            </Paragraph>  
+          </div>
 
           {/* ========================================== */}
           {/* หมวดหมู่ที่ 1: ห้องปฏิบัติการคอมพิวเตอร์ */}
