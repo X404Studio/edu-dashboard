@@ -1,4 +1,4 @@
-import { Layout, Table, Button } from "antd";
+import { Layout, Table, Button, message } from "antd";
 import Sidebar from "../components/Sidebar";
 import { useMemo, useState, useEffect } from "react";
 import {
@@ -43,57 +43,57 @@ function StudentStatus() {
   // ดึงข้อมูลจาก Database
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/dashboard-data`)
-      .then(r => r.json())
-      .then(setDashboardData);
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(setDashboardData)
+      .catch((error) => {
+        console.error("Student status dashboard fetch failed:", error);
+        message.error("โหลดข้อมูลสถานภาพนิสิตไม่ได้ — ตรวจสอบ Backend หรือ VITE_API_URL");
+      });
   }, []);
 
   const parsedData = useMemo(() => {
-    let rawList = dashboardData?.["ข้อมูลสถานภาพนิสิต"] || [];
-    
-    if (rawList && !Array.isArray(rawList) && rawList["ข้อมูลสถานภาพนิสิต"]) {
-      rawList = rawList["ข้อมูลสถานภาพนิสิต"];
-    }
-    
-    if (!Array.isArray(rawList) || rawList.length === 0) {
-      return { dropouts: [], dismissals: [], expels: [] };
-    }
+    const normalizeRows = (rows, fallbackNote) => {
+      if (!Array.isArray(rows)) return [];
 
-    const dropouts = [];
-    const dismissals = [];
-    const expels = [];
+      return rows.flatMap((row) => {
+        if (!row) return [];
 
-    rawList.forEach((row) => {
-      if (!row) return;
+        const year = String(row["ปีการศึกษา"] ?? "").trim();
+        const major = String(row["ชื่อสาขา"] ?? "").trim();
+        const count = Number(String(row["จำนวน"] ?? "").replace(/,/g, "").trim());
 
-      const rowValues = Object.values(row);
+        if (
+          !major ||
+          major === "สาขา" ||
+          major.includes("คณะ") ||
+          !year ||
+          year.includes("ปีการศึกษา") ||
+          !Number.isFinite(count) ||
+          count <= 0
+        ) {
+          return [];
+        }
 
-      const degree = rowValues[0] ? String(rowValues[0]).trim() : "";
-      const major = rowValues[1] ? String(rowValues[1]).trim() : "";
-      const year = rowValues[3] ? String(rowValues[3]).trim() : "";
+        return [{
+          ปีการศึกษา: year,
+          ชื่อสาขา: major,
+          หลักสูตร: row["หลักสูตร"] ? String(row["หลักสูตร"]).trim() : "—",
+          จำนวน: count,
+          หมายเหตุ: row["หมายเหตุ"] ? String(row["หมายเหตุ"]).trim() : fallbackNote,
+        }];
+      });
+    };
 
-      if (!major || major === "สาขา" || major.includes("คณะ") || !year || year.includes("ปีการศึกษา")) {
-        return; 
-      }
-
-      const dropCount1 = Number(rowValues[5]) || 0;
-      const dropCount2 = Number(rowValues[10]) || 0;
-      const totalDrop = dropCount1 + dropCount2;
-
-      const totalDismiss = Number(rowValues[6]) || 0;
-      const totalExpel = Number(rowValues[7]) || 0;
-
-      if (totalDrop > 0) {
-        dropouts.push({ ปีการศึกษา: year, ชื่อสาขา: major, หลักสูตร: degree, จำนวน: totalDrop, หมายเหตุ: "ลาออกตามความประสงค์" });
-      }
-      if (totalDismiss > 0) {
-        dismissals.push({ ปีการศึกษา: year, ชื่อสาขา: major, หลักสูตร: degree, จำนวน: totalDismiss, หมายเหตุ: "พ้นสภาพเนื่องจากผลการเรียน/เวลาเรียน" });
-      }
-      if (totalExpel > 0) {
-        expels.push({ ปีการศึกษา: year, ชื่อสาขา: major, หลักสูตร: degree, จำนวน: totalExpel, หมายเหตุ: "ถูกคัดชื่อออกจากระบบคณะ" });
-      }
-    });
-
-    return { dropouts, dismissals, expels };
+    return {
+      dropouts: normalizeRows(dashboardData?.["นิสิตลาออก"], "ลาออกตามความประสงค์"),
+      dismissals: normalizeRows(dashboardData?.["นิสิตพ้นสภาพ"], "พ้นสภาพเนื่องจากผลการเรียน/เวลาเรียน"),
+      expels: normalizeRows(dashboardData?.["นิสิตถูกคัดชื่อ"], "ถูกคัดชื่อออกจากระบบคณะ"),
+    };
   }, [dashboardData]);
 
   // ฟิลเตอร์คัดเลือก ปีการศึกษา
