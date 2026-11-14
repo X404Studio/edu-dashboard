@@ -60,6 +60,7 @@ function App() {
             <Route path="/evaluation" element={<EvaluationPage />} />
             <Route path="/graduate-quality" element={<GraduateQualityPage />} />
             <Route path="/courses" element={<CoursePage />} />
+            <Route path="/learning-support" element={<LearningSupportPage />} />
           </Route>
 
           {/* ล็อกเฉพาะ Admin เข้าได้ */}
