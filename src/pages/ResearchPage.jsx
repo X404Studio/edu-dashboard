@@ -77,35 +77,20 @@ function ResearchPage() {
     return () => unsub();
   }, [currentEmail]);
 
-  // โหลดข้อมูลทั้ง 3 ไฟล์วิจัยจาก localStorage
+  // โหลดข้อมูลทั้ง 3 ไฟล์วิจัย
   useEffect(() => {
-    const stored = localStorage.getItem("dashboardData");
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        
-        // 1. ไฟล์ผลงานวิจัย
-        const resList = parsed["ข้อมูลวิจัย(จำนวนผลงานวิจัย)"] || parsed["จำนวนผลงานวิจัย"] || parsed["ข้อมูลวิจัย"] || [];
-        setResearchDataList(Array.isArray(resList) ? resList : []);
-
-        // 2. ไฟล์ทรัพย์สินทางปัญญา
-        const ipList = parsed["ข้อมูลวิจัย(จำนวนทรัพย์สินทางปัญญา)"] || parsed["จำนวนทรัพย์สินทางปัญญา"] || parsed["ทรัพย์สินทางปัญญา"] || [];
-        setIpDataList(Array.isArray(ipList) ? ipList : []);
-
-        // 3. ไฟล์ H-Index
-        const hList = parsed["ข้อมูลวิจัย(ค่า H-Index)"] || parsed["ค่า H-Index"] || parsed["H-Index"] || [];
-        setHIndexDataList(Array.isArray(hList) ? hList : []);
-
-        // ตั้งค่าปีล่าสุดของ H-Index
-        if (Array.isArray(hList) && hList.length > 0) {
-          const years = hList.map(item => extractYear(item["ปี พ.ศ."] || item["ปีการศึกษา"])).filter(Boolean).sort().reverse();
-          if (years.length > 0) setSelectedHIndexYear(years[0]);
-        }
-      } catch (e) {
-        console.error("Error reading research data:", e);
-      }
-    }
-  }, []);
+  fetch(`${import.meta.env.VITE_API_URL}/api/research-data`)
+    .then(r => r.json())
+    .then(data => {
+      setResearchDataList(data["ผลงานวิจัย"] || []);
+      setIpDataList(data["ทรัพย์สินทางปัญญา"] || []);
+      const h = data["H-Index"] || [];
+      setHIndexDataList(h);
+      const years = h.map(i => extractYear(i["ปี พ.ศ."])).filter(Boolean).sort().reverse();
+      if (years.length > 0) setSelectedHIndexYear(years[0]);
+    })
+    .catch(err => console.error("โหลดข้อมูลวิจัยไม่สำเร็จ", err));
+}, []);
 
   // --- 1. ตัวเลือก Dropdown ผลงานวิจัย ---
   const scopusOptions = useMemo(() => {
