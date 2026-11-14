@@ -1,4 +1,4 @@
-import { Layout, Table, Button, Progress, Card, Empty, Tabs, Tag, Modal, Descriptions, Badge } from "antd";
+import { Layout, Table, Button, Progress, Card, Empty, Tabs, Tag, Badge } from "antd";
 import Sidebar from "../components/Sidebar";
 import { useMemo, useState, useEffect } from "react";
 import {
@@ -21,7 +21,6 @@ import {
   BookOutlined,
   ToolOutlined,
   TeamOutlined,
-  EyeOutlined,
   RiseOutlined,
   TrophyOutlined,
   AlertOutlined,
@@ -31,42 +30,6 @@ import {
 
 const { Header, Content } = Layout;
 
-// รายการคอลัมน์ย่อยสำหรับ "สิ่งสนับสนุนการเรียนรู้" (19 ด้าน แบ่งตามหมวดหมู่เพื่อให้ง่ายต่อการวิเคราะห์)
-const LEARNING_SUPPORT_FIELDS = [
-  // กลุ่มที่ 1: วิชาการและห้องเรียน
-  { key: "เนื้อหาหลักสูตร", label: "เนื้อหาหลักสูตร", group: "academic" },
-  { key: "อาจารย์", label: "อาจารย์ผู้สอน", group: "academic" },
-  { key: "สื่อ เอกสารและอุปกรณ์ประกอบการเรียนการสอน", label: "สื่อ เอกสารและอุปกรณ์ฯ", group: "academic" },
-  { key: "ห้องเรียน", label: "ห้องเรียน", group: "academic" },
-  { key: "ห้องปฏิบัติการคณะ", label: "ห้องปฏิบัติการคณะ", group: "academic" },
-  { key: "ห้องสมุด แหล่งเรียนรู้ และการฝึกอบรมการใช้งาน", label: "ห้องสมุดและแหล่งเรียนรู้", group: "academic" },
-  { key: "การให้บริการคอมพิวเตอร์และจุดเชื่อมต่ออินเตอร์เนต", label: "คอมพิวเตอร์และอินเทอร์เน็ต", group: "academic" },
-
-  // กลุ่มที่ 2: อาคารสถานที่และสิ่งแวดล้อม
-  { key: "ระบบสาธารณูปโภคและความปลอดภัย", label: "สาธารณูปโภคและความปลอดภัย (คณะ)", group: "facility" },
-  { key: "ภูมิทัศน์ และสิ่งแวดล้อมคณะ", label: "ภูมิทัศน์และสิ่งแวดล้อม (คณะ)", group: "facility" },
-  { key: "การให้บริการของอาคารเรียนรวม/ศูนย์เรียนรวม", label: "อาคารเรียนรวม/ศูนย์เรียนรวม", group: "facility" },
-  { key: "ระบบสาธารณูปโภคและความปลอดภัย.1", label: "สาธารณูปโภคและความปลอดภัย (วิทยาเขต)", group: "facility" },
-  { key: "ภูมิทัศน์ พื้นที่สีเขียว และสิ่งแวดล้อมของวิทยาเขต", label: "ภูมิทัศน์และพื้นที่สีเขียว (วิทยาเขต)", group: "facility" },
-
-  // กลุ่มที่ 3: บริการและสวัสดิการนิสิต
-  { key: "การให้บริการงานทะเบียนนิสิต", label: "งานทะเบียนนิสิต", group: "service" },
-  { key: "การบริการอนามัยและการรักษาพยาบาล", label: "บริการอนามัยและรักษาพยาบาล", group: "service" },
-  { key: "การจัดการและบริการด้านอาหาร", label: "บริการด้านอาหาร", group: "service" },
-  { key: "การจัดการและบริการด้านสนามกีฬา", label: "บริการด้านสนามกีฬา", group: "service" },
-  { key: "การให้บริการกิจการนิสิต", label: "บริการกิจการนิสิต", group: "service" },
-  { key: "การให้บริการรถโดยสารสวัสดิการ", label: "รถโดยสารสวัสดิการ", group: "service" },
-  { key: "ระบบการจราจร", label: "ระบบการจราจร", group: "service" },
-];
-
-// รายการคอลัมน์ย่อยสำหรับ "ผลที่เกิดกับนิสิต" และ "TQF" (4 ด้านหลัก)
-const CORE_EVAL_FIELDS = [
-  { key: "ความพึงพอใจเนื้อหาหลักสูตร", label: "ความพึงพอใจเนื้อหาหลักสูตร", color: "#0d9488" },
-  { key: "ความพึงพอใจอาจารย์", label: "ความพึงพอใจอาจารย์", color: "#2563eb" },
-  { key: "ความพึงพอใจสื่อ เอกสารและอุปกรณ์ประกอบการเรียนการสอน", label: "สื่อ เอกสารและอุปกรณ์ฯ", color: "#7c3aed" },
-  { key: "ความพึงพอใจห้องเรียน", label: "ความพึงพอใจห้องเรียน", color: "#d97706" },
-];
-
 function StudentSatisfactionPage() {
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedMajor, setSelectedMajor] = useState("");
@@ -74,26 +37,44 @@ function StudentSatisfactionPage() {
   const [appliedFilters, setAppliedFilters] = useState({ year: "", major: "", type: "" });
   const [rawData, setRawData] = useState([]);
 
-  // สเตตกรองหมวดหมู่ย่อยใน 19 ด้าน
-  const [supportGroupFilter, setSupportGroupFilter] = useState("all");
+  const [supportIndexFilter, setSupportIndexFilter] = useState("all");
 
   // สเตตสำหรับแบนเนอร์วิเคราะห์แนวโน้ม
   const [trendMajor, setTrendMajor] = useState("");
 
-  // สเตตสำหรับ Modal ดูรายละเอียดรายแถว
-  const [detailModal, setDetailModal] = useState({ open: false, record: null });
-
   // โหลดข้อมูลจริงจาก Database
-  const [dashboardData, setDashboardData] = useState(null);
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/dashboard-data`)
-      .then(r => r.json())
-      .then(setDashboardData);
+      .then((response) => {
+        if (!response.ok) throw new Error(`Failed to load dashboard data: ${response.status}`);
+        return response.json();
+      })
+      .then((data) => {
+        const rows = Array.isArray(data)
+          ? data
+          : Object.values(data || {}).flatMap((value) => Array.isArray(value) ? value : []);
+        setRawData(rows.flatMap((row, index) => {
+          const year = extractYear(row["ปีการศึกษา"] ?? row.academic_year);
+          const major = cleanString(row["ชื่อสาขา"] ?? row.program_name);
+          const evalType = cleanString(row["ประเภทการประเมิน"] ?? row.eval_type);
+          const evalIndex = cleanString(row["ดัชนีการประเมิน"] ?? row.eval_index);
+          const score = Number(row["คะแนน"] ?? row.score);
+          if (!year || !major || !evalType || !evalIndex || !Number.isFinite(score)) return [];
+          return [{
+            _id: row._id ?? `${year}-${major}-${evalType}-${evalIndex}-${index}`,
+            year,
+            major,
+            evalType,
+            evalIndex,
+            score,
+          }];
+        }));
+      });
   }, []);
 
   const cleanString = (str) => {
     if (!str) return "";
-    return String(str).replace(/\s+/g, '').replace(/['"]+/g, '').trim();
+    return String(str).replace(/['"]+/g, '').trim();
   };
 
   const extractYear = (yearStr) => {
@@ -132,22 +113,18 @@ function StudentSatisfactionPage() {
   // 4. คำนวณ KPI แยกตามประเภทการประเมินทั้ง 3 ด้าน
   const kpiStats = useMemo(() => {
     const calcAvgByType = (keyword) => {
-      const subset = filteredData.filter((d) => d.evalType.includes(keyword) && d.avgScore > 0);
+      const subset = filteredData.filter((d) => d.evalType.includes(keyword) && d.score > 0);
       if (subset.length === 0) return { avg: 0, text: "0.00", count: 0 };
-      const sum = subset.reduce((acc, cur) => acc + cur.avgScore, 0);
+      const sum = subset.reduce((acc, cur) => acc + cur.score, 0);
       const val = sum / subset.length;
       return { avg: val, text: val.toFixed(2), count: subset.length };
     };
 
-    const validAll = filteredData.filter((d) => d.avgScore > 0);
+    const validAll = filteredData.filter((d) => d.score > 0);
     const overallVal =
       validAll.length > 0
-        ? validAll.reduce((acc, cur) => acc + cur.avgScore, 0) / validAll.length
+        ? validAll.reduce((acc, cur) => acc + cur.score, 0) / validAll.length
         : 0;
-
-    const totalStd = filteredData.reduce((acc, cur) => acc + cur.totalStudents, 0);
-    const totalResp = filteredData.reduce((acc, cur) => acc + cur.respondents, 0);
-    const overallRespRate = totalStd > 0 ? ((totalResp / totalStd) * 100).toFixed(1) : "0.0";
 
     return {
       overall: overallVal,
@@ -155,9 +132,7 @@ function StudentSatisfactionPage() {
       studentOutcome: calcAvgByType("ผลที่เกิดกับนิสิต"),
       tqfOutcome: calcAvgByType("กรอบมาตรฐานคุณวุฒิ"),
       learningSupport: calcAvgByType("สิ่งสนับสนุนการเรียนรู้"),
-      totalResp,
-      totalStd,
-      overallRespRate,
+      rowCount: filteredData.length,
     };
   }, [filteredData]);
 
@@ -170,51 +145,52 @@ function StudentSatisfactionPage() {
     return { text: "ไม่มีข้อมูล", color: "#94a3b8", bg: "rgba(148, 163, 184, 0.15)" };
   };
 
-  // 5. ข้อมูลกราฟรายหัวข้อ: กลุ่มหลักสูตรและอาจารย์ (4 ด้าน)
+  // 5. ข้อมูลกราฟรายดัชนีการประเมิน: ผลที่เกิดกับนิสิตและ TQF
   const coreChartData = useMemo(() => {
     const subset = filteredData.filter(
       (d) => d.evalType.includes("ผลที่เกิดกับนิสิต") || d.evalType.includes("กรอบมาตรฐานคุณวุฒิ")
     );
-
-    return CORE_EVAL_FIELDS.map((field) => {
-      const valid = subset.filter((d) => Number(d[field.key]) > 0);
-      const avg =
-        valid.length > 0
-          ? Number((valid.reduce((sum, cur) => sum + Number(cur[field.key]), 0) / valid.length).toFixed(2))
-          : 0;
-      return { name: field.label, score: avg, color: field.color };
+    const indexScores = new Map();
+    subset.forEach(({ evalIndex, score }) => {
+      if (!indexScores.has(evalIndex)) indexScores.set(evalIndex, []);
+      indexScores.get(evalIndex).push(score);
     });
+    return [...indexScores].map(([name, scores], index) => ({
+      name,
+      score: Number((scores.reduce((sum, score) => sum + score, 0) / scores.length).toFixed(2)),
+      color: ["#0d9488", "#2563eb", "#7c3aed", "#d97706"][index % 4],
+    }));
   }, [filteredData]);
 
-  // 6. ข้อมูลกราฟรายหัวข้อ: กลุ่มสิ่งสนับสนุนการเรียนรู้ (19 ด้าน) + สรุป Top 3 / Bottom 3
+  // 6. ข้อมูลกราฟรายดัชนีการประเมิน: สิ่งสนับสนุนการเรียนรู้ + สรุป Top 3 / Bottom 3
   const { allSupportScores, filteredSupportChartData, top3Support, bottom3Support } = useMemo(() => {
     const subset = filteredData.filter((d) => d.evalType.includes("สิ่งสนับสนุนการเรียนรู้"));
-
-    const calculated = LEARNING_SUPPORT_FIELDS.map((field) => {
-      const valid = subset.filter((d) => Number(d[field.key]) > 0);
-      const avg =
-        valid.length > 0
-          ? Number((valid.reduce((sum, cur) => sum + Number(cur[field.key]), 0) / valid.length).toFixed(2))
-          : 0;
-      return { name: field.label, score: avg, group: field.group };
-    }).sort((a, b) => b.score - a.score);
+    const indexScores = new Map();
+    subset.forEach(({ evalIndex, score }) => {
+      if (!indexScores.has(evalIndex)) indexScores.set(evalIndex, []);
+      indexScores.get(evalIndex).push(score);
+    });
+    const calculated = [...indexScores].map(([name, scores]) => ({
+      name,
+      score: Number((scores.reduce((sum, score) => sum + score, 0) / scores.length).toFixed(2)),
+    })).sort((a, b) => b.score - a.score);
 
     const validRanked = calculated.filter((item) => item.score > 0);
     const top3 = validRanked.slice(0, 3);
     const bottom3 = [...validRanked].reverse().slice(0, 3);
 
-    const byGroup =
-      supportGroupFilter === "all"
+    const byIndex =
+      supportIndexFilter === "all"
         ? calculated
-        : calculated.filter((item) => item.group === supportGroupFilter);
+        : calculated.filter((item) => item.name === supportIndexFilter);
 
     return {
       allSupportScores: calculated,
-      filteredSupportChartData: byGroup,
+      filteredSupportChartData: byIndex,
       top3Support: top3,
       bottom3Support: bottom3,
     };
-  }, [filteredData, supportGroupFilter]);
+  }, [filteredData, supportIndexFilter]);
 
   // 7. ข้อมูลกราฟแนวโน้มรายปีแยกตามประเภทการประเมิน 3 ด้าน
   const trendChartsData = useMemo(() => {
@@ -225,7 +201,7 @@ function StudentSatisfactionPage() {
 
     const yearMap = {};
     subset.forEach((item) => {
-      if (!item.year || item.avgScore <= 0) return;
+      if (!item.year || item.score <= 0) return;
       if (!yearMap[item.year]) {
         yearMap[item.year] = {
           year: `ปีการศึกษา ${item.year}`,
@@ -236,13 +212,13 @@ function StudentSatisfactionPage() {
         };
       }
       if (item.evalType.includes("ผลที่เกิดกับนิสิต")) {
-        yearMap[item.year].outSum += item.avgScore;
+        yearMap[item.year].outSum += item.score;
         yearMap[item.year].outCnt += 1;
       } else if (item.evalType.includes("กรอบมาตรฐานคุณวุฒิ")) {
-        yearMap[item.year].tqfSum += item.avgScore;
+        yearMap[item.year].tqfSum += item.score;
         yearMap[item.year].tqfCnt += 1;
       } else if (item.evalType.includes("สิ่งสนับสนุนการเรียนรู้")) {
-        yearMap[item.year].supSum += item.avgScore;
+        yearMap[item.year].supSum += item.score;
         yearMap[item.year].supCnt += 1;
       }
     });
@@ -258,7 +234,7 @@ function StudentSatisfactionPage() {
       .sort((a, b) => a.rawYear - b.rawYear);
   }, [rawData, trendMajor]);
 
-  // สีแท่งกราฟ 19 ด้านตามระดับคะแนน
+  // สีแท่งกราฟตามระดับคะแนน
   const getBarColorByScore = (score) => {
     if (score >= 4.5) return "#10b981"; // เขียวมรกต (ดีเยี่ยม)
     if (score >= 4.2) return "#6366f1"; // ม่วงคราม (ดีมาก)
@@ -266,7 +242,7 @@ function StudentSatisfactionPage() {
     return "#f59e0b"; // ส้มอำพัน (ควรเฝ้าระวัง/พัฒนา)
   };
 
-  // 8. คอลัมน์ตารางแสดงผล
+  // 8. คอลัมน์ตารางแสดงผลตามข้อมูลรายแถว
   const tableColumns = [
     {
       title: "ปีการศึกษา",
@@ -312,34 +288,18 @@ function StudentSatisfactionPage() {
       },
     },
     {
-      title: "การมีส่วนร่วมตอบแบบสอบถาม",
-      key: "respondents",
-      width: 190,
-      align: "center",
-      render: (_, r) => {
-        const rate = Number(r.responseRate);
-        return (
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-            <span style={{ fontSize: 13 }}>
-              <strong>{r.respondents}</strong> / {r.totalStudents} คน
-            </span>
-            <Progress
-              percent={rate}
-              size="small"
-              strokeColor={rate >= 50 ? "#10b981" : rate >= 25 ? "#3b82f6" : "#f59e0b"}
-              style={{ width: 110, margin: 0 }}
-            />
-          </div>
-        );
-      },
+      title: "ดัชนีการประเมิน",
+      dataIndex: "evalIndex",
+      key: "evalIndex",
+      width: 320,
     },
     {
-      title: "คะแนนเฉลี่ยรวม",
-      dataIndex: "avgScore",
-      key: "avgScore",
+      title: "คะแนน",
+      dataIndex: "score",
+      key: "score",
       width: 135,
       align: "center",
-      sorter: (a, b) => a.avgScore - b.avgScore,
+      sorter: (a, b) => a.score - b.score,
       render: (v) => {
         const num = Number(v);
         const bg = num >= 4.5 ? "#ecfdf5" : num >= 4.0 ? "#eff6ff" : "#fffbeb";
@@ -360,24 +320,6 @@ function StudentSatisfactionPage() {
           </span>
         );
       },
-    },
-    {
-      title: "รายละเอียดรายข้อ",
-      key: "action",
-      width: 120,
-      align: "center",
-      render: (_, record) => (
-        <Button
-          size="small"
-          type="primary"
-          ghost
-          icon={<EyeOutlined />}
-          onClick={() => setDetailModal({ open: true, record })}
-          style={{ borderRadius: 8, fontWeight: 500 }}
-        >
-          ดูรายข้อ
-        </Button>
-      ),
     },
   ];
 
@@ -470,7 +412,7 @@ function StudentSatisfactionPage() {
               ผลการประเมินความพึงพอใจของนิสิตต่อหลักสูตร
             </h2>
             <div style={{ color: "#64748b", fontSize: "13px", lineHeight: "1.4" }}>
-              วิเคราะห์ผลที่เกิดกับนิสิต ผลการดำเนินงานตามกรอบ TQF และสิ่งสนับสนุนการเรียนรู้ 19 ด้าน
+              วิเคราะห์ผลที่เกิดกับนิสิต ผลการดำเนินงานตามกรอบ TQF และสิ่งสนับสนุนการเรียนรู้
             </div>
           </div>
         </Header>
@@ -705,7 +647,7 @@ function StudentSatisfactionPage() {
                     <Tag color="purple" style={{ borderRadius: 6, fontWeight: 600, marginBottom: 6 }}>
                       ด้านที่ 3 • สภาพแวดล้อมและบริการ
                     </Tag>
-                    <h4 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: "#0f172a" }}>สิ่งสนับสนุนการเรียนรู้ (19 ด้าน)</h4>
+                    <h4 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: "#0f172a" }}>สิ่งสนับสนุนการเรียนรู้</h4>
                   </div>
                   <div style={{ width: 42, height: 42, borderRadius: 12, background: "#ede9fe", display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <ToolOutlined style={{ fontSize: 22, color: "#7c3aed" }} />
@@ -720,7 +662,7 @@ function StudentSatisfactionPage() {
                 </div>
               </div>
 
-              {/* Card 4: อัตราการตอบแบบสอบถาม (Amber/Orange Theme) */}
+              {/* Card 4: จำนวนรายการประเมิน (Amber/Orange Theme) */}
               <div
                 style={{
                   background: "linear-gradient(135deg, #ffffff 60%, #fffbeb 100%)",
@@ -737,22 +679,18 @@ function StudentSatisfactionPage() {
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                   <div>
                     <Tag color="orange" style={{ borderRadius: 6, fontWeight: 600, marginBottom: 6 }}>
-                      การมีส่วนร่วม • Response Rate
+                      ข้อมูลที่แสดง
                     </Tag>
-                    <h4 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: "#0f172a" }}>อัตราการตอบแบบสอบถามรวม</h4>
+                    <h4 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: "#0f172a" }}>รายการประเมิน</h4>
                   </div>
                   <div style={{ width: 42, height: 42, borderRadius: 12, background: "#fef3c7", display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <TeamOutlined style={{ fontSize: 22, color: "#d97706" }} />
                   </div>
                 </div>
                 <div style={{ marginTop: 12 }}>
-                  <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
-                    <span style={{ fontSize: 30, fontWeight: 800, color: "#b45309" }}>{kpiStats.overallRespRate}%</span>
-                    <span style={{ fontSize: 12, color: "#64748b" }}>
-                      ({kpiStats.totalResp.toLocaleString()} / {kpiStats.totalStd.toLocaleString()} คน)
-                    </span>
-                  </div>
-                  <Progress percent={Number(kpiStats.overallRespRate)} showInfo={false} strokeColor="#d97706" trailColor="#e2e8f0" size="small" />
+                  <span style={{ fontSize: 30, fontWeight: 800, color: "#b45309" }}>
+                    {kpiStats.rowCount.toLocaleString()}
+                  </span>
                 </div>
               </div>
             </div>
@@ -777,7 +715,7 @@ function StudentSatisfactionPage() {
                   key: "support",
                   label: (
                     <span style={{ fontWeight: 600 }}>
-                      <ToolOutlined /> เจาะลึกสิ่งสนับสนุนการเรียนรู้ (19 ด้านย่อย)
+                      <ToolOutlined /> เจาะลึกสิ่งสนับสนุนการเรียนรู้ตามดัชนี
                     </span>
                   ),
                   children: (
@@ -823,31 +761,18 @@ function StudentSatisfactionPage() {
                         </div>
                       </div>
 
-                      {/* แถบตัวกรองหมวดหมู่ย่อย + คำอธิบายสี */}
+                      {/* ตัวกรองดัชนี + คำอธิบายสี */}
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12, marginBottom: 16, background: "#f8fafc", padding: "10px 16px", borderRadius: 12 }}>
-                        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                          {[
-                            { id: "all", label: "ทั้งหมด (19 ด้าน)" },
-                            { id: "academic", label: "วิชาการและห้องเรียน (7)" },
-                            { id: "facility", label: "อาคารและสิ่งแวดล้อม (5)" },
-                            { id: "service", label: "บริการและสวัสดิการ (7)" },
-                          ].map((tab) => (
-                            <Button
-                              key={tab.id}
-                              size="small"
-                              type={supportGroupFilter === tab.id ? "primary" : "default"}
-                              onClick={() => setSupportGroupFilter(tab.id)}
-                              style={{
-                                borderRadius: 20,
-                                fontWeight: 600,
-                                background: supportGroupFilter === tab.id ? "#7c3aed" : "#ffffff",
-                                borderColor: supportGroupFilter === tab.id ? "#7c3aed" : "#cbd5e1",
-                              }}
-                            >
-                              {tab.label}
-                            </Button>
+                        <select
+                          value={supportIndexFilter}
+                          onChange={(event) => setSupportIndexFilter(event.target.value)}
+                          style={{ maxWidth: "100%", padding: "8px 12px", borderRadius: 10, border: "1px solid #cbd5e1", background: "#ffffff" }}
+                        >
+                          <option value="all">ทุกดัชนี</option>
+                          {allSupportScores.map((item) => (
+                            <option key={item.name} value={item.name}>{item.name}</option>
                           ))}
-                        </div>
+                        </select>
 
                         {/* Legend สีตามเกณฑ์ */}
                         <div style={{ display: "flex", gap: 12, fontSize: 12, color: "#475569" }}>
@@ -994,7 +919,7 @@ function StudentSatisfactionPage() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(310px, 1fr))", gap: 20, marginBottom: 28 }}>
             {renderTrendCard("ผลที่เกิดกับนิสิต", "คะแนนเฉลี่ยผลลัพธ์ที่เกิดกับผู้เรียน", "studentOutcome", "ผลที่เกิดกับนิสิต", "#0d9488", "#f43f5e", "#14b8a6")}
             {renderTrendCard("ผลการดำเนินงานตามกรอบ TQF", "คะแนนเฉลี่ยตามกรอบมาตรฐานคุณวุฒิฯ", "tqfOutcome", "กรอบ TQF", "#2563eb", "#f59e0b", "#3b82f6")}
-            {renderTrendCard("สิ่งสนับสนุนการเรียนรู้", "คะแนนเฉลี่ยความพร้อม 19 ด้านย่อย", "learningSupport", "สิ่งสนับสนุนการเรียนรู้", "#7c3aed", "#10b981", "#8b5cf6")}
+            {renderTrendCard("สิ่งสนับสนุนการเรียนรู้", "คะแนนเฉลี่ยตามดัชนีการประเมิน", "learningSupport", "สิ่งสนับสนุนการเรียนรู้", "#7c3aed", "#10b981", "#8b5cf6")}
           </div>
 
           {/* 5. DATA TABLE ZONE */}
@@ -1002,82 +927,21 @@ function StudentSatisfactionPage() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
               <div>
                 <h3 style={{ margin: 0, fontSize: 17, fontWeight: 700, color: "#0f172a" }}>
-                  ตารางสรุปผลการประเมินรายหลักสูตร
+                  ผลการประเมินรายดัชนี
                 </h3>
-                <span style={{ fontSize: 12, color: "#64748b" }}>แสดงข้อมูลทั้งหมด {filteredData.length} รายการ (คลิก "ดูรายข้อ" เพื่อเปิดดูคะแนนครบทุกหัวข้อ)</span>
+                <span style={{ fontSize: 12, color: "#64748b" }}>แสดงข้อมูลทั้งหมด {filteredData.length} รายการ</span>
               </div>
             </div>
 
             <Table
               columns={tableColumns}
               dataSource={filteredData}
-              rowKey="_id"
+              rowKey={(record) => record._id}
               pagination={{ pageSize: 10, showSizeChanger: true }}
-              scroll={{ x: 920 }}
+              scroll={{ x: 1100 }}
               bordered
             />
           </div>
-
-          {/* MODAL แสดงคะแนนย่อยรายข้อของแถวที่เลือก */}
-          <Modal
-            title={
-              detailModal.record ? (
-                <div>
-                  <div style={{ fontSize: 16, fontWeight: 700, color: "#0f172a" }}>
-                    {detailModal.record.major} (ปีการศึกษา {detailModal.record.year})
-                  </div>
-                  <div style={{ fontSize: 12, color: "#64748b", fontWeight: 400 }}>
-                    {detailModal.record.evalType} • ผู้ตอบ {detailModal.record.respondents}/{detailModal.record.totalStudents} คน ({detailModal.record.responseRate}%)
-                  </div>
-                </div>
-              ) : (
-                "รายละเอียดคะแนน"
-              )
-            }
-            open={detailModal.open}
-            onCancel={() => setDetailModal({ open: false, record: null })}
-            footer={[
-              <Button key="close" type="primary" onClick={() => setDetailModal({ open: false, record: null })} style={{ borderRadius: 8 }}>
-                ปิดหน้าต่าง
-              </Button>,
-            ]}
-            width={720}
-          >
-            {detailModal.record && (
-              <div style={{ marginTop: 12 }}>
-                <Descriptions bordered column={1} size="small">
-                  {(detailModal.record.evalType.includes("สิ่งสนับสนุนการเรียนรู้")
-                    ? LEARNING_SUPPORT_FIELDS
-                    : CORE_EVAL_FIELDS
-                  ).map((field) => {
-                    const val = detailModal.record[field.key];
-                    const num = Number(val);
-                    const hasVal = val !== undefined && val !== "" && !isNaN(num);
-                    return (
-                      <Descriptions.Item key={field.key} label={field.label}>
-                        {hasVal ? (
-                          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-                            <Progress
-                              percent={(num / 5) * 100}
-                              showInfo={false}
-                              strokeColor={getBarColorByScore(num)}
-                              size="small"
-                              style={{ flex: 1, margin: 0 }}
-                            />
-                            <strong style={{ color: getBarColorByScore(num), minWidth: 38, textAlign: "right" }}>
-                              {num.toFixed(2)}
-                            </strong>
-                          </div>
-                        ) : (
-                          "-"
-                        )}
-                      </Descriptions.Item>
-                    );
-                  })}
-                </Descriptions>
-              </div>
-            )}
-          </Modal>
         </Content>
       </Layout>
     </Layout>
