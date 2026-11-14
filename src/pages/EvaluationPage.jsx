@@ -163,8 +163,8 @@ function EvaluationPage() {
           isMaster: isMasterMajor(mName),
           comp2: getItemValue(item, ["องค์ที่ 2 บัณฑิต", "บัณฑิต"]),
           comp3: getItemValue(item, ["องค์ที่ 3 นิสิต", "นิสิต"]),
-          comp4: getItemValue(item, ["องค์ที่ 4อาจารย์", "อาจารย์"]),
-          comp5: getItemValue(item, ["องค์ที่ 5หลักสูตร การเรียนการสอน การประเมินผู้เรียน", "หลักสูตร การเรียนการสอน การประเมินผู้เรียน"]),
+          comp4: getItemValue(item, ["องค์ที่ 4 อาจารย์", "อาจารย์"]),
+          comp5: getItemValue(item, ["องค์ที่ 5 หลักสูตร การเรียนการสอน การประเมินผู้เรียน", "หลักสูตร การเรียนการสอน การประเมินผู้เรียน"]),
           comp6: getItemValue(item, ["องค์ที่ 6 สิ่งสนับสนุนการเรียนรู้", "สิ่งสนับสนุนการเรียนรู้"]),
           avgTotal: getItemValue(item, ["คะแนนเฉลี่ยรวม", "คะแนนรวม"])
         };
@@ -190,8 +190,8 @@ function EvaluationPage() {
       
       const c2 = Number(getItemValue(item, ["องค์ที่ 2 บัณฑิต", "บัณฑิต"]) || 0);
       const c3 = Number(getItemValue(item, ["องค์ที่ 3 นิสิต", "นิสิต"]) || 0);
-      const c4 = Number(getItemValue(item, ["องค์ที่ 4อาจารย์", "อาจารย์"]) || 0);
-      const c5 = Number(getItemValue(item, ["องค์ที่ 5หลักสูตร การเรียนการสอน การประเมินผู้เรียน", "หลักสูตร การเรียนการสอน การประเมินผู้เรียน"]) || 0);
+      const c4 = Number(getItemValue(item, ["องค์ที่ 4 อาจารย์", "อาจารย์"]) || 0);
+      const c5 = Number(getItemValue(item, ["องค์ที่ 5 หลักสูตร การเรียนการสอน การประเมินผู้เรียน", "หลักสูตร การเรียนการสอน การประเมินผู้เรียน"]) || 0);
       const c6 = Number(getItemValue(item, ["องค์ที่ 6 สิ่งสนับสนุนการเรียนรู้", "สิ่งสนับสนุนการเรียนรู้"]) || 0);
 
       if (inp > 0) { sumInput += inp; cInput++; }
