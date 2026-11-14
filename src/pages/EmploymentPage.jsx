@@ -514,14 +514,6 @@ function EmploymentPage() {
     return result;
   }, [staticDataForTable, trendYear, trendMajor, trendRange]);
 
-  if (loading) {
-    return (
-      <Layout style={{ minHeight: "100vh", justifyContent: "center", alignItems: "center", background: "#f8fafc" }}>
-        <Spin size="large" tip="กำลังโหลดข้อมูลภาวะการมีงานทำแบบ Real-time..." />
-      </Layout>
-    );
-  }
-
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sidebar />
