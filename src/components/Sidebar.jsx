@@ -89,11 +89,11 @@ function Sidebar() {
       label: "ผลประเมินคุณภาพบัณฑิต" 
     },
 
-//    { 
-//      key: "/student-satisfaction", 
-//     icon: <SmileOutlined style={{ color: "#14b8a6" }} />, 
-//      label: "ความพึงพอใจนิสิต" 
-//    },
+    { 
+      key: "/student-satisfaction", 
+     icon: <SmileOutlined style={{ color: "#14b8a6" }} />, 
+      label: "ความพึงพอใจนิสิต" 
+    },
 
     { type: "divider", style: { borderColor: "rgba(255, 255, 255, 0.1)", margin: "8px 12px" } },
 
