@@ -30,6 +30,17 @@ import {
 
 const { Header, Content } = Layout;
 
+const cleanString = (str) => {
+  if (!str) return "";
+  return String(str).replace(/['"]+/g, "").trim();
+};
+
+const extractYear = (yearStr) => {
+  if (!yearStr) return "";
+  const match = String(yearStr).match(/\d+/);
+  return match ? match[0] : String(yearStr).trim();
+};
+
 function StudentSatisfactionPage() {
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedMajor, setSelectedMajor] = useState("");
@@ -71,17 +82,6 @@ function StudentSatisfactionPage() {
         }));
       });
   }, []);
-
-  const cleanString = (str) => {
-    if (!str) return "";
-    return String(str).replace(/['"]+/g, '').trim();
-  };
-
-  const extractYear = (yearStr) => {
-    if (!yearStr) return "";
-    const match = String(yearStr).match(/\d+/);
-    return match ? match[0] : String(yearStr).trim();
-  };
 
   // 2. ดึงรายการตัวเลือก Dropdown
   const years = useMemo(() => {

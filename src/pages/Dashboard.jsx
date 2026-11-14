@@ -552,7 +552,11 @@ function Dashboard() {
               <Button
                 shape="circle"
                 icon={<ReloadOutlined style={{ fontSize: "20px" }} />}
-                onClick={loadDashboardData}
+                onClick={() =>
+                  fetch(`${import.meta.env.VITE_API_URL}/api/dashboard-data`)
+                  .then((r) => r.json())
+                  .then(setDashboardData)
+                }
                 style={{
                   width: "48px",
                   height: "48px",
