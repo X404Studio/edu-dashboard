@@ -89,11 +89,11 @@ function Sidebar() {
       label: "ผลประเมินคุณภาพบัณฑิต" 
     },
 
-    { 
-      key: "/student-satisfaction", 
-      icon: <SmileOutlined style={{ color: "#14b8a6" }} />, 
-      label: "ความพึงพอใจนิสิต" 
-    },
+//    { 
+//      key: "/student-satisfaction", 
+//     icon: <SmileOutlined style={{ color: "#14b8a6" }} />, 
+//      label: "ความพึงพอใจนิสิต" 
+//    },
 
     { type: "divider", style: { borderColor: "rgba(255, 255, 255, 0.1)", margin: "8px 12px" } },
 
@@ -103,11 +103,11 @@ function Sidebar() {
       icon: <UserOutlined style={{ color: "#f59e0b" }} />, 
       label: "ข้อมูลอาจารย์" 
     },
-    { 
-      key: "/courses", 
-      icon: <BookOutlined style={{ color: "#d97706" }} />, 
-      label: "ข้อมูลรายวิชา" 
-    },
+//    { 
+//      key: "/courses", 
+//      icon: <BookOutlined style={{ color: "#d97706" }} />, 
+//      label: "ข้อมูลรายวิชา" 
+//    },
     { 
       key: "/evaluation", 
       icon: <LikeOutlined style={{ color: "#eab308" }} />, 
@@ -129,11 +129,11 @@ function Sidebar() {
       icon: <ExperimentOutlined style={{ color: "#a855f7" }} />, 
       label: "ผลงานวิจัย" 
     });
-    bottomMenuItems.push({ 
-      key: "/finance", 
-      icon: <DollarOutlined style={{ color: "#ec4899" }} />, 
-      label: "ข้อมูลการเงิน" 
-    });
+//    bottomMenuItems.push({ 
+//     key: "/finance", 
+//      icon: <DollarOutlined style={{ color: "#ec4899" }} />, 
+//      label: "ข้อมูลการเงิน" 
+//    });
   }
 
   if (isSuperAdmin) {
