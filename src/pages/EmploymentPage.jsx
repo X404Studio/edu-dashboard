@@ -19,7 +19,7 @@ import {
 import { SearchOutlined } from "@ant-design/icons";
 
 // Firebase Config Import 
-import { db } from "../firebase";
+import { db } from "./firebase";
 import { collection, onSnapshot, query } from "firebase/firestore";
 
 const { Header, Content } = Layout;
