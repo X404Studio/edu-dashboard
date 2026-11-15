@@ -27,7 +27,7 @@ const building15CompRooms = [
     name: "ห้อง 150412",
     seats: 40,
     system: "ระบบ VDI (Virtual Desktop Infrastructure)",
-    image: "/images/room/150412-40.JPG",
+    image: "/Lab-Room/Com/150412-40.JPG",
     type: "comp"
   },
   {
