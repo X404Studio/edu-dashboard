@@ -35,7 +35,7 @@ const building15CompRooms = [
     name: "ห้อง 150415",
     seats: 60,
     system: "ระบบ VDI (Virtual Desktop Infrastructure)",
-    image: "/images/room/150415-60.JPG",
+    image: "/Lab-Room/Com/150415-60.JPG",
     type: "comp"
   },
   {
@@ -43,7 +43,7 @@ const building15CompRooms = [
     name: "ห้อง 150416",
     seats: 60,
     system: "ระบบ VDI (Virtual Desktop Infrastructure)",
-    image: "/images/room/150416-60.JPG",
+    image: "/Lab-Room/Com//150416-60.JPG",
     type: "comp"
   }
 ];
@@ -54,7 +54,7 @@ const building26CompRooms = [
     name: "ห้อง 26504",
     seats: 20,
     system: "Windows OS",
-    image: "/images/room/26504-20.JPG",
+    image: "/Lab-Room/Com/26504-20.JPG",
     type: "comp"
   },
   {
@@ -62,7 +62,7 @@ const building26CompRooms = [
     name: "ห้อง 26506",
     seats: 25,
     system: "Windows OS",
-    image: "/images/room/26506-25.JPG",
+    image: "/Lab-Room/Com/26506-25.JPG",
     type: "comp"
   },
   {
@@ -70,7 +70,7 @@ const building26CompRooms = [
     name: "ห้อง 26507",
     seats: 40,
     system: "MAC OS",
-    image: "/images/room/26507-40.JPG",
+    image: "/Lab-Room/Com/26507-40.JPG",
     type: "comp"
   },
   {
@@ -78,7 +78,7 @@ const building26CompRooms = [
     name: "ห้อง 26508",
     seats: 40,
     system: "ระบบ VDI (Virtual Desktop Infrastructure)",
-    image: "/images/room/26508-40.JPG",
+    image: "/Lab-Room/Com/26508-40.JPG",
     type: "comp"
   },
   {
@@ -86,7 +86,7 @@ const building26CompRooms = [
     name: "ห้อง 26512",
     seats: 40,
     system: "ระบบ VDI (Virtual Desktop Infrastructure)",
-    image: "/images/room/26512-40.JPG",
+    image: "/Lab-Room/Com/26512-40.JPG",
     type: "comp"
   }
 ];
@@ -100,7 +100,7 @@ const building15ChemRooms = [
     name: "ห้อง 150312",
     seats: 30,
     system: "ห้องปฏิบัติการเคมี",
-    image: "/images/room/150312-30.JPG",
+    image: "/Lab-Room/Chem/150312-30.JPG",
     type: "chem"
   },
   {
@@ -108,7 +108,7 @@ const building15ChemRooms = [
     name: "ห้อง 150315",
     seats: 30,
     system: "ห้องปฏิบัติการเคมี",
-    image: "/images/room/150315-30.JPG",
+    image: "/Lab-Room/Chem/150315-30.JPG",
     type: "chem"
   },
   {
@@ -116,7 +116,7 @@ const building15ChemRooms = [
     name: "ห้อง 150317",
     seats: 30,
     system: "ห้องปฏิบัติการเคมี",
-    image: "/images/room/150317-30.JPG",
+    image: "/Lab-Room/Chem/150317-30.JPG",
     type: "chem"
   }
 ];
@@ -127,7 +127,7 @@ const building26ChemRooms = [
     name: "ห้อง 261104",
     seats: 36,
     system: "ห้องปฏิบัติการเคมี",
-    image: "/images/room/261104-36.JPG",
+    image: "/Lab-Room/Chem/261104-36.JPG",
     type: "chem"
   },
   {
@@ -135,7 +135,7 @@ const building26ChemRooms = [
     name: "ห้อง 261108",
     seats: 36,
     system: "ห้องปฏิบัติการเคมี",
-    image: "/images/room/261108-36.JPG",
+    image: "/Lab-Room/Chem/261108-36.JPG",
     type: "chem"
   }
 ];
@@ -149,7 +149,7 @@ const building2PhysicsRooms = [
     name: "ห้อง 2207",
     seats: 30,
     system: "ห้องปฏิบัติการฟิสิกส์",
-    image: "/images/room/2207-30.JPG",
+    image: "/Lab-Room/Physics/2207-30.JPG",
     type: "physics"
   }
 ];
@@ -160,7 +160,7 @@ const building15PhysicsRooms = [
     name: "ห้อง 150212",
     seats: 40,
     system: "ห้องปฏิบัติการฟิสิกส์",
-    image: "/images/room/150212-40.JPG",
+    image: "/Lab-Room/Physics/150212-40.JPG",
     type: "physics"
   },
   {
@@ -168,7 +168,7 @@ const building15PhysicsRooms = [
     name: "ห้อง 150215",
     seats: 40,
     system: "ห้องปฏิบัติการฟิสิกส์",
-    image: "/images/room/150215-40.JPG",
+    image: "/Lab-Room/Physics/150215-40.JPG",
     type: "physics"
   }
 ];
@@ -179,7 +179,7 @@ const building26PhysicsRooms = [
     name: "ห้อง 26603",
     seats: 40,
     system: "ห้องปฏิบัติการฟิสิกส์",
-    image: "/images/room/26603-40.JPG",
+    image: "/Lab-Room/Physics/26603-40.JPG",
     type: "physics"
   },
   {
@@ -187,7 +187,7 @@ const building26PhysicsRooms = [
     name: "ห้อง 26605",
     seats: 40,
     system: "ห้องปฏิบัติการฟิสิกส์",
-    image: "/images/room/26605-40.JPG",
+    image: "/Lab-Room/Physics/26605-40.JPG",
     type: "physics"
   }
 ];
@@ -201,7 +201,7 @@ const building26EnvRooms = [
     name: "ห้อง 26904",
     seats: 40,
     system: "ห้องปฏิบัติการสิ่งแวดล้อม",
-    image: "/images/room/26904-40.JPG",
+    image: "/Lab-Room/Env/26904-40.JPG",
     type: "env"
   },
   {
@@ -209,7 +209,7 @@ const building26EnvRooms = [
     name: "ห้อง 26905",
     seats: 24,
     system: "ห้องปฏิบัติการสิ่งแวดล้อม",
-    image: "/images/room/26905-24.JPG",
+    image: "/Lab-Room/Env/26905-24.JPG",
     type: "env"
   },
   {
@@ -217,7 +217,7 @@ const building26EnvRooms = [
     name: "ห้อง 261004",
     seats: 50,
     system: "ห้องปฏิบัติการสิ่งแวดล้อม",
-    image: "/images/room/261004-50.JPG",
+    image: "/Lab-Room/Env/261004-50.JPG",
     type: "env"
   },
   {
@@ -225,7 +225,7 @@ const building26EnvRooms = [
     name: "ห้อง 261008",
     seats: 20,
     system: "ห้องปฏิบัติการสิ่งแวดล้อม",
-    image: "/images/room/261008-20.JPG",
+    image: "/Lab-Room/Env/261008-20.JPG",
     type: "env"
   }
 ];
@@ -235,8 +235,8 @@ const additionalImages = {
   building2: "",
   building15: "",
   building26: "",
-  library: "/images/room/P1141981.JPG",
-  infirmary: "/images/room/P1141985.JPG"
+  library: "/Building/Library.JPG",
+  infirmary: "/Building/Firstaid.JPG"
 };
 
 function LearningSupportPage() {
