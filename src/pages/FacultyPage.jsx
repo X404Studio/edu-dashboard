@@ -259,9 +259,9 @@ function FacultyPage() {
 
       const publicPath = value
         .replace(/^\/?public\//i, "")
-        .replace(/^lecturer\//i, "Lecturer/")
         .replace(/\.(jpe?g|png|webp)$/i, (extension) => extension.toLowerCase());
-      return `${import.meta.env.BASE_URL}${publicPath.replace(/^\/+/, "")}`;
+      const lecturerPath = publicPath.replace(/^\/?lecturer\//i, "");
+      return `${import.meta.env.BASE_URL}Lecturer/${lecturerPath.replace(/^\/+/, "")}`;
     }
     
     if (name.includes("นาง") || name.includes("น.ส.") || name.includes("อาจารย์หญิง") || name.includes("ดร.หญิง")) {
