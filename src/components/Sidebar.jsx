@@ -116,7 +116,7 @@ function Sidebar() {
     { 
       key: "/learning-support", 
       icon: <BookOutlined style={{ color: "#38bdf8" }} />, 
-      label: "สนับสนุนการเรียนการสอน" 
+      label: "สิ่งสนับสนุนการเรียนการสอน" 
     }
     
   ];
