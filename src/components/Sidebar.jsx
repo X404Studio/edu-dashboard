@@ -113,6 +113,11 @@ function Sidebar() {
       icon: <LikeOutlined style={{ color: "#eab308" }} />, 
       label: "ผลการประเมินหลักสูตร" 
     },
+     { 
+      key: "/learning-support", 
+      icon: <AppstoreOutlined style={{ color: "#38bdf8" }} />, 
+      label: "สิ่งสนับสนุนการเรียนการสอน" 
+    },
   ];
 
   // --- 4. หมวดสำหรับ Admin ---
