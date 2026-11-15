@@ -252,8 +252,16 @@ function FacultyPage() {
     const name = String(item["ชื่อ นามสกุล"] || item["ชื่อ-นามสกุล"] || item["ชื่ออาจารย์"] || item["ชื่อ"] || "");
     const cleanName = encodeURIComponent(name);
     
-    if (item["รูปภาพ"] || item["รูป"] || item["avatar"]) {
-      return item["รูปภาพ"] || item["รูป"] || item["avatar"];
+    const image = item["รูปภาพ"] || item["รูป"] || item["avatar"];
+    if (image) {
+      const value = String(image).trim().replace(/\\/g, "/");
+      if (/^(https?:|data:|blob:)/i.test(value)) return value;
+
+      const publicPath = value
+        .replace(/^\/?public\//i, "")
+        .replace(/^lecturer\//i, "Lecturer/")
+        .replace(/\.(jpe?g|png|webp)$/i, (extension) => extension.toLowerCase());
+      return `${import.meta.env.BASE_URL}${publicPath.replace(/^\/+/, "")}`;
     }
     
     if (name.includes("นาง") || name.includes("น.ส.") || name.includes("อาจารย์หญิง") || name.includes("ดร.หญิง")) {
