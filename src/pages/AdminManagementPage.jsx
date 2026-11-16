@@ -6,7 +6,7 @@ import { db } from "./firebase";
 import { doc, onSnapshot, setDoc } from "firebase/firestore";
 
 const { Header, Content } = Layout;
-const SUPER_ADMIN_EMAIL = "testname.01@ku.th";
+const SUPER_ADMIN_EMAIL = "admin";
 
 function AdminManagementPage() {
   const [adminList, setAdminList] = useState([]);

@@ -32,7 +32,7 @@ const LoginPage = () => {
       const userEmail = decoded.email ? decoded.email.toLowerCase() : "";
 
       // 🔍 เช็กรายชื่อแอดมินบน Firebase
-      let adminList = ["naramon.si@ku.th"];
+      let adminList = ["bandit.ta@ku.th"];
       try {
         const docSnap = await getDoc(doc(db, "system_config", "admins"));
         if (docSnap.exists() && Array.isArray(docSnap.data().list)) {
@@ -68,7 +68,7 @@ const LoginPage = () => {
       if (values.username === "admin" && values.password === "123456") {
         saveSessionAndRedirect({
           username: values.username,
-          email: "naramon.si@ku.th",
+          email: "bandit.ta@ku.th",
           role: "admin"
         });
       } else {
