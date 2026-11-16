@@ -86,7 +86,7 @@ const LoginPage = () => {
             🎓
           </div>
           <h2 style={{ margin: 0, color: "#1e293b", fontSize: 22, fontWeight: 700 }}>เข้าสู่ระบบ</h2>
-          <p style={{ margin: "4px 0 0 0", color: "#64748b", fontSize: 13 }}>ระบบวิเคราะห์ภาวะการมีงานทำของบัณฑิต</p>
+          <p style={{ margin: "4px 0 0 0", color: "#64748b", fontSize: 13 }}>=======================</p>
         </div>
 
         <Form layout="vertical" onFinish={handleFinish} requiredMark={false}>
