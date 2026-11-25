@@ -232,9 +232,9 @@ const building26EnvRooms = [
 
 // 5. ข้อมูลรูปภาพสำหรับ Card ต่างๆ (ใส่ path รูปทีหลังได้)
 const additionalImages = {
-  building2: "",
-  building15: "",
-  building26: "",
+  building2: "/Building/B02-2026.jpg",
+  building15: "/Building/B15-2026.jpg",
+  building26: "/Building/B26-2026.jpg",
   library: "/Building/Library.JPG",
   infirmary: "/Building/Firstaid.JPG"
 };
