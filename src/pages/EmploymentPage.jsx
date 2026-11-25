@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect, useCallback } from "react";
-import { Layout, Button, Empty, Card, Row, Col, Select, Tag, Space, Tooltip as AntTooltip } from "antd"; 
+import { Layout, Button, Empty, Card, Row, Col, Select, Tag, Space, Tooltip as AntTooltip, message } from "antd"; 
 import Sidebar from "../components/Sidebar";
 import {
   BarChart,
@@ -86,22 +86,8 @@ function Dashboard() {
         console.error("Employment dashboard fetch failed:", error);
         message.error("ไม่สามารถโหลดข้อมูลภาวะการมีงานทำได้ — ตรวจสอบ Backend หรือ VITE_API_URL");
         setDashboardData({ "ภาวะการมีงานทำ": [] });
-      })
-      .finally(() => {
-        setLoading(false);
       });
   }, []);
-
-  useEffect(() => {
-    if (dashboardData) {
-      setRawData(dashboardData["ภาวะการมีงานทำ"] || []);
-    }
-  }, [dashboardData]);
-  useEffect(() => {
-    if (dashboardData) {
-     setStaticDataForTable(dashboardData["ภาวะการมีงานทำ"] || []);
-    }
-  }, [dashboardData]);
 
   const cleanString = (str) => {
     if (!str) return "";
