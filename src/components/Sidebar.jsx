@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Layout, Menu, Button, message, Avatar } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
+import whaleMascot from "../assets/whale-mascot.png";
 import {
   DashboardOutlined,
   GlobalOutlined,
   UploadOutlined,
   TeamOutlined,
   UserOutlined,
-  BarChartOutlined,
   UsergroupDeleteOutlined,
   LikeOutlined,
   IdcardOutlined,
@@ -16,34 +16,58 @@ import {
   SafetyCertificateOutlined,
   ExperimentOutlined,
   DollarOutlined,
-  SmileOutlined
+  SmileOutlined,
+  AppstoreOutlined,
+  RocketOutlined
 } from "@ant-design/icons";
-import { db } from "../pages/firebase";
+import { db } from "../firebase";
 import { doc, onSnapshot } from "firebase/firestore";
 
 const { Sider } = Layout;
+const DEFAULT_SUPER_ADMIN = "naramon.si@ku.th";
 
 function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const userEmail = (localStorage.getItem("email") || "").toLowerCase();
+  const userEmail = (localStorage.getItem("email") || "").toLowerCase().trim();
   const userName = localStorage.getItem("user") || "ผู้ใช้งาน";
   const userPicture = localStorage.getItem("picture");
 
-  const [adminList, setAdminList] = useState(["naramon.si@ku.th"]);
+  const [superAdminEmail, setSuperAdminEmail] = useState(DEFAULT_SUPER_ADMIN);
+  const [adminList, setAdminList] = useState([DEFAULT_SUPER_ADMIN]);
+  const [rolesMap, setRolesMap] = useState({});
 
   useEffect(() => {
     const unsub = onSnapshot(doc(db, "system_config", "admins"), (docSnap) => {
-      if (docSnap.exists() && Array.isArray(docSnap.data().list)) {
-        setAdminList(docSnap.data().list.map(e => e.toLowerCase()));
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (data.superAdmin) {
+          setSuperAdminEmail(String(data.superAdmin).toLowerCase().trim());
+        }
+        if (Array.isArray(data.list)) {
+          setAdminList(data.list.map((e) => String(e).toLowerCase().trim()));
+        }
+        if (data.roles && typeof data.roles === "object") {
+          setRolesMap(data.roles);
+        }
       }
     });
     return () => unsub();
   }, []);
 
-  const isAdmin = adminList.includes(userEmail);
-  const isSuperAdmin = userEmail === "naramon.si@ku.th";
+  // ตรวจสอบบทบาทของผู้ใช้งานปัจจุบัน (รองรับ Super Admin หลายคน)
+  const userRoleFromDB = rolesMap[userEmail];
+  const isSuperAdmin =
+    userRoleFromDB === "Super Admin" ||
+    userEmail === superAdminEmail ||
+    userEmail === DEFAULT_SUPER_ADMIN;
+
+  // เป็น Admin เมื่อเป็น Super Admin หรือมีบทบาทเป็น Admin (รองรับข้อมูลเก่าที่อยู่ใน list แต่ยังไม่มี rolesMap)
+  const isAdmin =
+    isSuperAdmin ||
+    userRoleFromDB === "Admin (ผู้ดูแลระบบ)" ||
+    (adminList.includes(userEmail) && !userRoleFromDB);
 
   const handleLogout = () => {
     localStorage.removeItem("isLoggedIn");
@@ -58,7 +82,7 @@ function Sidebar() {
   };
 
   const topMenuItems = [
-    // --- 1. หมวดภาพรวม & บริหาร ---
+    // --- 1. หมวดภาพรวม & บริหาร (สีเขียว) ---
     { 
       key: "/", 
       icon: <DashboardOutlined style={{ color: "#10b981" }} />, 
@@ -67,7 +91,7 @@ function Sidebar() {
 
     { type: "divider", style: { borderColor: "rgba(255, 255, 255, 0.1)", margin: "8px 12px" } },
 
-    // --- 2. หมวดข้อมูลนิสิต & บัณฑิต ---
+    // --- 2. หมวดข้อมูลนิสิต & บัณฑิต (สีฟ้า / น้ำเงิน) ---
     { 
       key: "/students", 
       icon: <TeamOutlined style={{ color: "#38bdf8" }} />, 
@@ -76,7 +100,7 @@ function Sidebar() {
     { 
       key: "/student-status", 
       icon: <UsergroupDeleteOutlined style={{ color: "#0284c7" }} />, 
-      label: "ข้อมูลสถานะนิสิต" 
+      label: "ข้อมูลนิสิตที่มีสถานะพ้นสภาพ" 
     },
     { 
       key: "/employment", 
@@ -88,16 +112,15 @@ function Sidebar() {
       icon: <IdcardOutlined style={{ color: "#06b6d4" }} />, 
       label: "ผลประเมินคุณภาพบัณฑิต" 
     },
-
     { 
       key: "/student-satisfaction", 
-     icon: <SmileOutlined style={{ color: "#14b8a6" }} />, 
+      icon: <SmileOutlined style={{ color: "#14b8a6" }} />, 
       label: "ความพึงพอใจนิสิต" 
     },
 
     { type: "divider", style: { borderColor: "rgba(255, 255, 255, 0.1)", margin: "8px 12px" } },
 
-    // --- 3. หมวดข้อมูลอาจารย์ & การเรียนการสอน ---
+    // --- 3. หมวดข้อมูลอาจารย์ & การเรียนการสอน (สีส้ม / ทอง / ฟ้าเข้ม) ---
     { 
       key: "/faculty", 
       icon: <UserOutlined style={{ color: "#f59e0b" }} />, 
@@ -115,13 +138,12 @@ function Sidebar() {
     },
     { 
       key: "/learning-support", 
-      icon: <BookOutlined style={{ color: "#38bdf8" }} />, 
+      icon: <AppstoreOutlined style={{ color: "#38bdf8" }} />, 
       label: "สิ่งสนับสนุนการเรียนการสอน" 
-    }
-    
+    },
   ];
 
-  // --- 4. หมวดสำหรับ Admin ---
+  // --- 4. หมวดสำหรับ Admin & Super Admin (เห็นเฉพาะ 2 บทบาทนี้) ---
   const bottomMenuItems = [];
 
   if (isAdmin) {
@@ -136,7 +158,12 @@ function Sidebar() {
       label: "ผลงานวิจัย" 
     });
 //    bottomMenuItems.push({ 
-//     key: "/finance", 
+//      key: "/upskill", 
+//      icon: <RocketOutlined style={{ color: "#f472b6" }} />, 
+//      label: "Reskill / Upskill" 
+//    });
+//    bottomMenuItems.push({ 
+//      key: "/finance", 
 //      icon: <DollarOutlined style={{ color: "#ec4899" }} />, 
 //      label: "ข้อมูลการเงิน" 
 //    });
@@ -146,9 +173,19 @@ function Sidebar() {
     bottomMenuItems.push({
       key: "/admin-management",
       icon: <SafetyCertificateOutlined style={{ color: "#ef4444" }} />,
-      label: "จัดการผู้ดูแลระบบ",
+      label: "กำหนดสิทธิ์ผู้ใช้งาน",
     });
   }
+
+  // ข้อความแสดงสถานะใต้ชื่อโปรไฟล์
+  const getRoleLabel = () => {
+    if (isSuperAdmin) return "👑 Super Admin";
+    if (isAdmin) return "🔑 Admin";
+    if (userRoleFromDB && userRoleFromDB !== "User (ผู้ใช้งานทั่วไป)") {
+      return `🎓 ${userRoleFromDB}`;
+    }
+    return "👤 User";
+  };
 
   return (
     <Sider 
@@ -177,9 +214,30 @@ function Sidebar() {
         
         {/* โลโก้ + โปรไฟล์ + เมนูหน้าหลัก */}
         <div>
-          {/* HEADER / LOGO */}
-          <div style={{ color: "white", padding: "20px 16px", fontSize: 20, fontWeight: "bold", textAlign: "center", borderBottom: "1px solid rgba(255, 255, 255, 0.1)", marginBottom: 10 }}>
-            Dashboard 
+          {/* HEADER / WHALE MASCOT */}
+          <div
+            onClick={() => navigate("/")}
+            style={{
+              padding: "18px 16px 14px 16px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+              marginBottom: 12,
+              cursor: "pointer"
+            }}
+          >
+            <img
+              src={whaleMascot}
+              alt="Sci KUSRC Mascot"
+              style={{
+                height: "84px",
+                width: "auto",
+                objectFit: "contain",
+                display: "block",
+                filter: "drop-shadow(0 0 6px rgba(255, 255, 255, 0.7)) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35))"
+              }}
+            />
           </div>
 
           {/* USER PROFILE */}
@@ -190,12 +248,12 @@ function Sidebar() {
                 {userName}
               </div>
               <div style={{ color: "#94a3b8", fontSize: 11 }}>
-                {isAdmin ? "🔑 Admin" : "👤 User"}
+                {getRoleLabel()}
               </div>
             </div>
           </div>
 
-          {/* TOP MENU */}
+          {/* TOP MENU (เห็นทุกคน) */}
           <Menu 
             mode="inline" 
             theme="dark" 
@@ -208,9 +266,9 @@ function Sidebar() {
 
         <div style={{ paddingBottom: 16 }}>
           
+          {/* BOTTOM MENU (เห็นเฉพาะ Super Admin และ Admin) */}
           {bottomMenuItems.length > 0 && (
             <>
-              {/* แบ่งโซนแอดมิน */}
               <div 
                 style={{ 
                   height: "1px", 
@@ -219,7 +277,6 @@ function Sidebar() {
                 }} 
               />
 
-              {/* BOTTOM MENU */}
               <Menu 
                 mode="inline" 
                 theme="dark" 
