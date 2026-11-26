@@ -31,9 +31,6 @@ import {
   Legend
 } from "recharts";
 
-import { db } from "./firebase";
-import { doc, onSnapshot } from "firebase/firestore";
-
 const { Header, Content } = Layout;
 
 // รายการสาขาวิชาเพิ่มเติม
