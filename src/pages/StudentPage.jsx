@@ -476,10 +476,10 @@ function StudentPage() {
               shape="circle" 
               icon={<ReloadOutlined />} 
               onClick={() =>
-                  fetch(`${import.meta.env.VITE_API_URL}/api/dashboard-data`)
-                  .then((r) => r.json())
-                  .then(setDashboardData)
-                }
+                fetch(`${import.meta.env.VITE_API_URL}/api/dashboard-data`)
+                .then((r) => r.json())
+                .then(setDashboardData)
+              }
               style={{ borderColor: "#cbd5e1", color: "#64748b" }}
             />
           </Space>
@@ -1052,7 +1052,7 @@ function StudentPage() {
                     <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
                       <span style={{ display: "inline-block", width: "4px", height: "16px", backgroundColor: "#0ea5e9", borderRadius: "2px" }}></span>
                       <h4 style={{ color: "#0f172a", fontWeight: "700", margin: 0, fontSize: "15px" }}>
-                        นิสิตระดับปริญญาตรี
+                        🎓 นิสิตระดับปริญญาตรี
                       </h4>
                     </div>
 
@@ -1115,7 +1115,7 @@ function StudentPage() {
                     <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
                       <span style={{ display: "inline-block", width: "4px", height: "16px", backgroundColor: "#8b5cf6", borderRadius: "2px" }}></span>
                       <h4 style={{ color: "#0f172a", fontWeight: "700", margin: 0, fontSize: "15px" }}>
-                        นิสิตระดับปริญญาโท
+                        🎓 นิสิตระดับปริญญาโท
                       </h4>
                     </div>
 
