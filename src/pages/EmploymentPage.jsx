@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from "react";
-import { Layout, Table, Button, Progress, Card, Empty, Spin } from "antd";
+import { Layout, Table, Button, Progress, Card, Empty, Spin, message } from "antd";
 import Sidebar from "../components/Sidebar";
 import {
   BarChart,
@@ -155,28 +155,20 @@ function EmploymentPage() {
         return r.json();
       })
       .then((data) => {
-        setDashboardData(data);
+        const employmentData = data["ภาวะการมีงานทำ"] || [];
+        setRawData(employmentData);
+        setStaticDataForTable(employmentData);
       })
       .catch((error) => {
         console.error("Employment dashboard fetch failed:", error);
         message.error("ไม่สามารถโหลดข้อมูลภาวะการมีงานทำได้ — ตรวจสอบ Backend หรือ VITE_API_URL");
-        setDashboardData({ "ภาวะการมีงานทำ": [] });
+        setRawData([]);
+        setStaticDataForTable([]);
       })
       .finally(() => {
         setLoading(false);
       });
   }, []);
-
-  useEffect(() => {
-    if (dashboardData) {
-      setRawData(dashboardData["ภาวะการมีงานทำ"] || []);
-    }
-  }, [dashboardData]);
-  useEffect(() => {
-    if (dashboardData) {
-     setStaticDataForTable(dashboardData["ภาวะการมีงานทำ"] || []);
-    }
-  }, [dashboardData]);
 
   const cleanString = (str) => {
     if (!str) return "";
