@@ -18,10 +18,6 @@ import {
 } from "recharts";
 import { SearchOutlined } from "@ant-design/icons";
 
-// Firebase Config Import 
-import { db } from "./firebase";
-import { collection, onSnapshot, query } from "firebase/firestore";
-
 const { Header, Content } = Layout;
 
 // 1. COMPONENT ตารางรายละเอียด 
@@ -65,7 +61,8 @@ const EmploymentTable = ({ dataSource, yearsList, cleanString, extractYear }) =>
         const studyMore = getVal("ศึกษาต่อ");
         const ordain = getVal("บัณฑิตบวช");
         const military = getVal("บัณฑิตเกณฑ์ทหาร");
-        const excluded = hasJobBefore + studyMore + ordain + military;
+        const wantSelfEmployed = getVal("สาเหตุที่ไม่ทำงาน เพราะต้องการประกอบอาชีพอิสระ จำนวน");
+        const excluded = hasJobBefore + studyMore + ordain + military + wantSelfEmployed;
 
         const divisor = respondents - excluded;
         const rate = divisor > 0 ? (employedStaffAndSelf / divisor) * 100 : 0;
@@ -147,8 +144,6 @@ function EmploymentPage() {
 
   const COLORS_NAVY_THEME = ["#023e8a", "#0077b6", "#0096c7", "#00b4d8", "#48cae4", "#90e0ef"];
   const COLORS_EMPLOYED_THEME = ["#10b981", "#f59e0b"];
-
-  const [dashboardData, setDashboardData] = useState(null);
 
 // โหลดข้อมูลจาก Database
   useEffect(() => {
@@ -253,7 +248,8 @@ function EmploymentPage() {
         const studyMore = getVal("ศึกษาต่อ");
         const ordain = getVal("บัณฑิตบวช");
         const military = getVal("บัณฑิตเกณฑ์ทหาร");
-        const excluded = hasJobBefore + studyMore + ordain + military;
+        const wantSelfEmployed = getVal("สาเหตุที่ไม่ทำงาน เพราะต้องการประกอบอาชีพอิสระ จำนวน");
+        const excluded = hasJobBefore + studyMore + ordain + military + wantSelfEmployed;
 
         const employedStaffAndSelf = employedStaff + selfEmployed;
         const divisor = respondents - excluded;
@@ -264,7 +260,7 @@ function EmploymentPage() {
 
         return {
           year, majorRaw, majorClean, totalGraduates, respondents, employedStaff, selfEmployed,
-          hasJobBefore, studyMore, ordain, military, excluded, rate,
+          hasJobBefore, studyMore, ordain, military, wantSelfEmployed, excluded, rate,
           gov, state, privateOrg, inter, otherOrg, matchMajor, nonMatchMajor, employedStaffAndSelf
         };
       })
@@ -279,7 +275,7 @@ function EmploymentPage() {
     let totalGraduates = 0;
     let totalRespondents = 0; let totalEmployedStaff = 0; let totalSelfEmployed = 0;
     let totalExcluded = 0; let totalStudyMore = 0; let totalHasJobBefore = 0;
-    let totalOrdain = 0; let totalMilitary = 0;
+    let totalOrdain = 0; let totalMilitary = 0; let totalWantSelfEmployed = 0;
     
     let totalGov = 0; let totalState = 0; let totalPrivate = 0; let totalInter = 0; let totalOther = 0;
     let totalMatch = 0; let totalNonMatch = 0;
@@ -295,6 +291,7 @@ function EmploymentPage() {
       totalHasJobBefore += Number(item.hasJobBefore || 0);
       totalOrdain += Number(item.ordain || 0);
       totalMilitary += Number(item.military || 0);
+      totalWantSelfEmployed += Number(item.wantSelfEmployed || 0);
 
       totalGov += Number(item.gov || 0);
       totalState += Number(item.state || 0);
@@ -322,6 +319,7 @@ function EmploymentPage() {
       hasJobBefore: totalHasJobBefore, 
       ordain: totalOrdain, 
       military: totalMilitary,
+      wantSelfEmployed: totalWantSelfEmployed,
       rate: Number(finalRate.toFixed(2)),
       responseRate: Number(responseRate.toFixed(2)),
       gov: totalGov, 
@@ -348,7 +346,7 @@ function EmploymentPage() {
 
     // คำนวณจำนวนคนที่มีงานทำ และผู้ยังไม่ได้งานทำ
     const totalEmployed = totals.employedStaff + totals.selfEmployed; // ผู้มีงานทำรวม
-    const divisor = totals.respondents - totals.hasJobBefore - totals.studyMore - totals.ordain - totals.military; // ผู้มีสิทธิ์หางาน
+    const divisor = totals.respondents - totals.hasJobBefore - totals.studyMore - totals.ordain - totals.military - totals.wantSelfEmployed; // ผู้มีสิทธิ์หางาน
     const unemployed = Math.max(0, divisor - totalEmployed); // ผู้ยังไม่ได้งานทำ
 
     const employmentRateChart = [
@@ -448,12 +446,13 @@ function EmploymentPage() {
       const studyMore = getVal("ศึกษาต่อ");
       const ordain = getVal("บัณฑิตบวช");
       const military = getVal("บัณฑิตเกณฑ์ทหาร");
+      const wantSelfEmployed = getVal("สาเหตุที่ไม่ทำงาน เพราะต้องการประกอบอาชีพอิสระ จำนวน");
       
       const hasOwnBusiness = getVal("มีกิจการของตนเองที่มีรายได้ประจำอยู่แล้ว จำนวน") || getVal("มีกิจการของตนเองที่มีรายได้ประจำอยู่แล้ว") || Math.round(selfEmployed * 0.35);
 
       const employedStaff = gov + state + privateOrg + inter + otherOrg; 
       const employedStaffAndSelf = employedStaff + selfEmployed;
-      const excluded = hasJobBefore + studyMore + ordain + military;
+      const excluded = hasJobBefore + studyMore + ordain + military + wantSelfEmployed;
 
       const matchMajor = getVal("ตรงสาขาที่จบ") || getVal("ทำงานตรงสาขาจำนวน") || Math.round(employedStaff * 0.74);
       const nonMatchMajor = getVal("ไม่ตรงสาขาที่จบ") || Math.round(employedStaff * 0.26);
@@ -513,6 +512,14 @@ function EmploymentPage() {
 
     return result;
   }, [staticDataForTable, trendYear, trendMajor, trendRange]);
+
+  if (loading) {
+    return (
+      <Layout style={{ minHeight: "100vh", justifyContent: "center", alignItems: "center", background: "#f8fafc" }}>
+        <Spin size="large" tip="กำลังโหลดข้อมูลภาวะการมีงานทำแบบ Real-time..." />
+      </Layout>
+    );
+  }
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -612,8 +619,8 @@ function EmploymentPage() {
               <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: 4, background: "#10b981" }} />
               <div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ color: "#15803d", fontSize: 13, fontWeight: 700, letterSpacing: "0.2px" }}>
-                    ทำงานประจำ
+                  <span style={{ color: "#047857", fontSize: 13, fontWeight: 700, letterSpacing: "0.2px" }}>
+                    บัณฑิตที่ทำงานประจำ
                   </span>
                   <span style={{ background: "#dcfce7", color: "#15803d", fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 20 }}>
                     {totals.respondents > 0 ? ((totals.employedStaff / totals.respondents) * 100).toFixed(1) : 0}%
@@ -627,17 +634,17 @@ function EmploymentPage() {
                 </div>
               </div>
               <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px dashed #cbd5e1", fontSize: 12, color: "#047857", fontWeight: 500 }}>
-                คิดเป็นสัดส่วนจากผู้ตอบแบบสำรวจ
+                ภาครัฐ / เอกชน / รัฐวิสาหกิจ / อื่นๆ
               </div>
             </div>
 
-            {/* Card 3: บัณฑิตที่ประกอบอาชีพอิสระ */}
+            {/* Card 3: ประกอบอาชีพอิสระ / Freelance */}
             <div 
               style={{ 
                 background: "linear-gradient(145deg, #ffffff 0%, #fffbeb 100%)", 
                 padding: "24px", 
                 borderRadius: 16, 
-                border: "1px solid #fef3c7", 
+                border: "1px solid #fde68a", 
                 boxShadow: "0 4px 14px rgba(245, 158, 11, 0.06)",
                 display: "flex",
                 flexDirection: "column",
